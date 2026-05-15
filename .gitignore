@@ -1,0 +1,28 @@
+# Environment Variables
+*.env
+
+# Logs
+logs
+*.log
+
+# Dist files
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Python development files
+venv/
+__pycache__/
+*.pyc
+instance/

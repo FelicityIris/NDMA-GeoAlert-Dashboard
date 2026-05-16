@@ -14,7 +14,6 @@ certifi==2026.4.22
 charset-normalizer==3.4.7
 click==8.3.3
 Flask==3.1.3
-Flask-SQLAlchemy==3.1.1
 greenlet==3.5.0
 idna==3.15
 itsdangerous==2.2.0
@@ -23,7 +22,6 @@ MarkupSafe==3.0.3
 PyMySQL==1.1.3
 python-dotenv==1.2.2
 requests==2.34.2
-SQLAlchemy==2.0.49
 typing_extensions==4.15.0
 urllib3==2.7.0
 Werkzeug==3.1.8
@@ -52,7 +50,7 @@ FLASK_ENV=development
 
 # Flask Session Key
 # Generate using `python -c "import secrets; print(secrets.token_hex(32))"`
-SESSION_KEY=<generated_session_key>
+SECRET_KEY=<generated_session_key>
 
 # DB Auth
 DB_USER=<mysql_user_name>

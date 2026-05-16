@@ -7,5 +7,15 @@ Home
 {% block content %}
 <h1>NDMA Alerts Filter</h1>
 
-<p>Public Alerts here</p>
+{% for alert in alerts %}
+
+<div>
+    <h3>{{ alert.headline_en}}</h3>
+    <p>{{ alert.event }}</p>
+    <p>Severity: {{ alert.severity }}</p>
+    <hr>
+</div>
+
+{% endfor %}
+
 {% endblock %}

@@ -10,7 +10,7 @@ def create_app():
 
     app = Flask(__name__)
 
-    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+    app.config["SESSION_KEY"] = os.getenv("SESSION_KEY")
 
     app.config["SQLALCHEMY_DATABASE_URI"] = (
         f"mysql+pymysql://"
@@ -22,8 +22,10 @@ def create_app():
 
     db.init_app(app)
 
-    @app.route("/")
-    def home():
-        return "NDMA Alerts Filter"
+    from app.routes.public_routes import public_bp
+    from app.routes.admin_routes import admin_bp
+
+    app.register_blueprint(public_bp)
+    app.register_blueprint(admin_bp)
 
     return app

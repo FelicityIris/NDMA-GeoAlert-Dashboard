@@ -5,6 +5,7 @@ USE ndma_alerts_db;
 CREATE TABLE IF NOT EXISTS states (
     state_id INT PRIMARY KEY AUTO_INCREMENT,
     state_name VARCHAR(100) NOT NULL UNIQUE,
+    feed_slug VARCHAR(100) NOT NULL UNIQUE,
     is_selected BOOLEAN NOT NULL DEFAULT FALSE
 );
 

@@ -24,24 +24,33 @@ def parse_polygon_xml(xml_data):
     return polygons
 
 def extract_polygon_url(root):
-    parameters = root.findall(".//cap:parameter", namespaces=NAMESPACE)
+    parameters = root.findall(".//cap:parameter", namespaces = NAMESPACE)
     for parameter in parameters:
-        value_name = parameter.findtext("cap:valueName", namespaces=NAMESPACE)
-        value = parameter.findtext("cap:value", namespaces=NAMESPACE)
+        value_name = parameter.findtext("cap:valueName", namespaces = NAMESPACE)
+        value = parameter.findtext("cap:value", namespaces = NAMESPACE)
         if value_name == "Polygon URL":
             return value
+    return None
+
+def extract_english_headline(root):
+    info_blocks = root.findall(".//cap:info", namespaces = NAMESPACE)
+    for info in info_blocks:
+        language = info.findtext("cap:language", namespaces = NAMESPACE)
+        if language and language.startswith("en"):
+            headline = info.findtext("cap:headline", namespaces = NAMESPACE)
+            return headline
     return None
 
 def parse_alert_xml(xml_data):
     root = ET.fromstring(xml_data)
     
     alert_data = {}
-    alert_data["identifier"] = (root.findtext(".//cap:identifier", namespaces=NAMESPACE)).split("-")[1].split("_")[0]
-    alert_data["event"] = root.findtext(".//cap:event", namespaces=NAMESPACE)
-    alert_data["headline_en"] = root.findtext(".//cap:headline", namespaces=NAMESPACE)
-    alert_data["severity"] = root.findtext(".//cap:severity", namespaces=NAMESPACE)
-    alert_data["urgency"] = root.findtext(".//cap:urgency", namespaces=NAMESPACE)
-    alert_data["certainty"] = root.findtext(".//cap:certainty", namespaces=NAMESPACE)
+    alert_data["identifier"] = (root.findtext(".//cap:identifier", namespaces = NAMESPACE)).split("-")[1].split("_")[0]
+    alert_data["event"] = root.findtext(".//cap:event", namespaces = NAMESPACE)
+    alert_data["headline_en"] = extract_english_headline(root)
+    alert_data["severity"] = root.findtext(".//cap:severity", namespaces = NAMESPACE)
+    alert_data["urgency"] = root.findtext(".//cap:urgency", namespaces = NAMESPACE)
+    alert_data["certainty"] = root.findtext(".//cap:certainty", namespaces = NAMESPACE)
     
     polygon_url = extract_polygon_url(root)
     polygons = []

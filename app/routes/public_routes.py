@@ -13,5 +13,5 @@ def home():
     # return { "alerts" : alerts }
 
     # temporarily fetch alerts from RSS feed and display directly for testing
-    alerts = ingest_state_alerts("assam")
+    alerts = ingest_state_alerts("karnataka")
     return render_template("public/index.html", alerts = alerts)

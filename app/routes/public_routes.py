@@ -8,8 +8,10 @@ public_bp = Blueprint("public", __name__)
 
 @public_bp.route("/")
 def home():
+    # fetch alerts from SQL DB
     # alerts = get_all_alerts()
+    # return { "alerts" : alerts }
 
-    # return render_template("public/index.html", alerts = alerts)
+    # temporarily fetch alerts from RSS feed and display directly for testing
     alerts = ingest_state_alerts("assam")
-    return { "alerts" : alerts }
+    return render_template("public/index.html", alerts = alerts)

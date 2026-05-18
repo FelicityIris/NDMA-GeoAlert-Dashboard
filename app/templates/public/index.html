@@ -10,9 +10,21 @@ Home
 {% for alert in alerts %}
 
 <div>
-    <h3>{{ alert.headline_en}}</h3>
-    <p>{{ alert.event }}</p>
+    <h3>{{ alert.event}}</h3>
+    <p>ID: {{ alert.identifier }}</p>
+    <p>{{ alert.headline_en }}</p>
     <p>Severity: {{ alert.severity }}</p>
+    <p>Urgency: {{ alert.urgency }}</p>
+    <p>Certainty: {{ alert.certainty }}</p>
+    {% for polygon in alert.polygons %}
+    <p>
+        Polygon:
+        {{ polygon[:80] }}
+        ...
+        {{ polygon[-40:] }}
+    </p>
+    <p>--</p>
+    {% endfor %}
     <hr>
 </div>
 

@@ -13,6 +13,7 @@ blinker==1.9.0
 certifi==2026.4.22
 charset-normalizer==3.4.7
 click==8.3.3
+feedparser==6.0.12
 Flask==3.1.3
 greenlet==3.5.0
 idna==3.15
@@ -22,6 +23,7 @@ MarkupSafe==3.0.3
 PyMySQL==1.1.3
 python-dotenv==1.2.2
 requests==2.34.2
+sgmllib3k==1.0.0
 typing_extensions==4.15.0
 urllib3==2.7.0
 Werkzeug==3.1.8

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS states (
     is_selected BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE IF NOT EXISTS districs (
+CREATE TABLE IF NOT EXISTS districts (
     district_code INT PRIMARY KEY,
     district_name VARCHAR(255) NOT NULL
 );
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS alerts (
     onset DATETIME,
     expires DATETIME,
 	
-    polygon TEXT,
+    polygon JSON,
 	
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	
@@ -74,6 +74,6 @@ CREATE TABLE IF NOT EXISTS alert_districts (
         REFERENCES alerts(alert_id)
         ON DELETE CASCADE,
     FOREIGN KEY (district_code)
-        REFERENCES districs(district_code)
+        REFERENCES districts(district_code)
         ON DELETE CASCADE
 );

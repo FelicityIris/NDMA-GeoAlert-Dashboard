@@ -41,6 +41,17 @@ def extract_english_headline(root):
             return headline
     return None
 
+def extract_district_codes(root):
+    district_codes = []
+    geocodes = root.findall(".//cap:geocode", namespaces = NAMESPACE)
+    for geocode in geocodes:
+        value_name = geocode.findtext("cap:valueName", namespaces = NAMESPACE)
+        value = geocode.findtext("cap:value", namespaces = NAMESPACE)
+        if value_name == "LGD District Code":
+            if value:
+                district_codes.append(int(value.strip()))
+    return district_codes
+
 def parse_alert_xml(xml_data):
     root = ET.fromstring(xml_data)
     
@@ -62,6 +73,8 @@ def parse_alert_xml(xml_data):
             print(f"Failed to fetch polygon: {polygon_url}")
             print(error)
     alert_data["polygons"] = polygons
+
+    alert_data["district_codes"] = extract_district_codes(root)
 
     return alert_data
 

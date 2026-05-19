@@ -9,6 +9,11 @@ CREATE TABLE IF NOT EXISTS states (
     is_selected BOOLEAN NOT NULL DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS districs (
+    district_code INT PRIMARY KEY,
+    district_name VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS alerts (
     alert_id BIGINT PRIMARY KEY AUTO_INCREMENT,
 	
@@ -55,5 +60,20 @@ CREATE TABLE IF NOT EXISTS alerts (
 	
     FOREIGN KEY (state_id)
         REFERENCES states(state_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS alert_districts (
+    alert_id BIGINT NOT NULL,
+    district_code INT NOT NULL,
+    PRIMARY KEY (
+        alert_id,
+        district_code
+    ),
+    FOREIGN KEY (alert_id)
+        REFERENCES alerts(alert_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (district_code)
+        REFERENCES districs(district_code)
         ON DELETE CASCADE
 );

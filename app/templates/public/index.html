@@ -16,6 +16,7 @@ Home
     <p>Severity: {{ alert.severity }}</p>
     <p>Urgency: {{ alert.urgency }}</p>
     <p>Certainty: {{ alert.certainty }}</p>
+    <p>Affected Districts: {% for district_code in alert.district_codes %} {{ district_code }} {% endfor %}</p>
     {% for polygon in alert.polygons %}
     <p>
         Polygon:

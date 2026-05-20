@@ -21,9 +21,11 @@ itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.3
 PyMySQL==1.1.3
+python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 requests==2.34.2
 sgmllib3k==1.0.0
+six==1.17.0
 typing_extensions==4.15.0
 urllib3==2.7.0
 Werkzeug==3.1.8

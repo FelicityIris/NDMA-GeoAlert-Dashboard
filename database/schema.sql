@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS alerts (
     onset DATETIME,
     expires DATETIME,
 	
-    polygon JSON,
+    polygons JSON,
 	
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	

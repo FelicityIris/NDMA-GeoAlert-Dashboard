@@ -1,4 +1,5 @@
 import requests
+from dateutil import parser
 import xml.etree.ElementTree as ET
 
 NAMESPACE = { "cap" : "urn:oasis:names:tc:emergency:cap:1.2" }
@@ -52,6 +53,11 @@ def extract_district_codes(root):
                 district_codes.append(int(value.strip()))
     return district_codes
 
+def parse_datetime(value):
+    if not value:
+        return None
+    return parser.parse(value)
+
 def parse_alert_xml(xml_data):
     root = ET.fromstring(xml_data)
     
@@ -62,6 +68,9 @@ def parse_alert_xml(xml_data):
     alert_data["severity"] = root.findtext(".//cap:severity", namespaces = NAMESPACE)
     alert_data["urgency"] = root.findtext(".//cap:urgency", namespaces = NAMESPACE)
     alert_data["certainty"] = root.findtext(".//cap:certainty", namespaces = NAMESPACE)
+    alert_data["effective"] = parse_datetime(root.findtext(".//cap:effective", namespaces = NAMESPACE))
+    alert_data["onset"] = parse_datetime(root.findtext(".//cap:onset", namespaces = NAMESPACE))
+    alert_data["expires"] = parse_datetime(root.findtext(".//cap:expires", namespaces = NAMESPACE))
     
     polygon_url = extract_polygon_url(root)
     polygons = []

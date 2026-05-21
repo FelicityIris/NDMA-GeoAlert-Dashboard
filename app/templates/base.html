@@ -2,20 +2,21 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
         <title>{% block title %}NDMA Alerts Filter{% endblock %}</title>
     </head>
 
     <body>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/admin">Admin</a>
+        <nav class="title-menu">
+            <h2>NDMA GeoAlert Dashboard</h2>
         </nav>
-
-        <hr>
 
         {% block content %}
         {% endblock %}
+
+        <script src = "https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src = "{{ url_for('static', filename = 'js/map.js') }}"></script>
     </body>
 </html>

@@ -1,34 +1,60 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home
+Overview
 {% endblock %}
 
 {% block content %}
-<h1>NDMA GeoAlert Dashboard</h1>
+<div class="dashboard">
+    <div class="sidebar">    
+    {% for alert in alerts %}
+        <h3>{{ alert.event}}</h3>
+        <sub>ID: {{ alert.alert_identifier }}</sub>
+        <p>{{ alert.headline_en }}</p>
+        <div class="alert-specs">
+            <div class="spec">
+                <label class="spec-label">
+                    Severity
+                </label>
+                <label class="spec-value">
+                    {{ alert.severity }} 
+                </label>
+            </div>
 
-{% for alert in alerts %}
-
-<div>
-    <h3>{{ alert.event}}</h3>
-    <p>ID: {{ alert.alert_identifier }}</p>
-    <p>{{ alert.headline_en }}</p>
-    <p>Severity: {{ alert.severity }}</p>
-    <p>Urgency: {{ alert.urgency }}</p>
-    <p>Certainty: {{ alert.certainty }}</p>
-    <p>Affected Districts: {% for district_code in alert.district_codes %} {{ district_code }} {% endfor %}</p>
-    {% for polygon in alert.polygons %}
-    <p>
-        Polygon:
-        {{ polygon[:80] }}
-        ...
-        {{ polygon[-40:] }}
-    </p>
-    <p>--</p>
+            <div class="spec">
+                <label class="spec-label">
+                    Urgency
+                </label>
+                <label class="spec-value">
+                    {{ alert.urgency }}
+                </label>
+            </div>
+            
+            <div class="spec">
+                <label class="spec-label">
+                    Certainty
+                </label>
+                <label class="spec-value">
+                    {{ alert.certainty }}
+                </label>
+            </div>
+        </div>
+        <p>
+            Affected Districts:
+            {% for district_code in alert.district_codes %}
+                {{ district_code }}
+            {% endfor %}
+        </p>
+        <hr>
     {% endfor %}
-    <hr>
+    </div>
+
+    <div class="map-container">
+        <div class="map" id="map"></div>
+    </div>
 </div>
 
-{% endfor %}
-
+<script>
+    const alerts = {{ alerts | tojson }};
+</script>
 {% endblock %}

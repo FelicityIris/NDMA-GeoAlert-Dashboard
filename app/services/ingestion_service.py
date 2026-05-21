@@ -2,7 +2,7 @@ import time
 from app.services.state_service import get_selected_states
 from app.services.feed_fetcher import ( get_alert_links, extract_identifer_from_link )
 from app.services.xml_parser import fetch_and_parse_alert
-from app.services.alert_service import ( save_alert, delete_expired_alerts, alert_exists )
+from app.services.alert_service import ( save_alert, delete_expired_alerts, alert_exists, is_alert_expired )
 
 def ingest_alerts():
     selected_states = get_selected_states()
@@ -17,8 +17,13 @@ def ingest_alerts():
                     identifier = extract_identifer_from_link(link)
                     if alert_exists(identifier):
                         print(f"Skipping existing alert: {identifier}")
+                        time.sleep(1)
                         continue
                     alert_data = fetch_and_parse_alert(link)
+                    if is_alert_expired(alert_data):
+                        print(f"Skipping expired alert: {alert_data['identifier']}")
+                        time.sleep(1)
+                        continue
                     save_alert(alert_data, state_id)
                     print(f"Saved alert: {alert_data['identifier']}")
                     time.sleep(1)

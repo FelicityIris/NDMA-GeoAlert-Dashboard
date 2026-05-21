@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 from app.services.db import get_connection
 
@@ -160,3 +161,9 @@ def alert_exists(alert_identifier):
             return cursor.fetchone() is not None
     finally:
         connection.close()
+
+def is_alert_expired(alert_data):
+    expires = alert_data.get("expires")
+    if not expires:
+        return False
+    return expires < datetime.now(expires.tzinfo)

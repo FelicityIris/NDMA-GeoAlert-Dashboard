@@ -1,6 +1,7 @@
 import feedparser
-from app.services.http_client import session
 from urllib.parse import ( urlparse, parse_qs )
+from app.services.http_client import session
+from app.services.feed_cache_service import ( get_feed_cache, update_feed_cache )
 
 BASE_RSS_URL = "https://sachet.ndma.gov.in/cap_public_website/rss/"
 
@@ -9,8 +10,27 @@ def generate_feed_url(feed_slug):
 
 def fetch_rss_feed(feed_slug):
     url = generate_feed_url(feed_slug)
-    response = session.get(url, timeout=10)
+    
+    cached_feed = get_feed_cache(feed_slug)
+    headers = {}
+    if cached_feed:
+        if cached_feed["etag"]:
+            headers["If-None-Match"] = cached_feed["etag"]
+        if cached_feed["last_modified"]:
+            headers["If-Modified-Since"] = cached_feed["last_modified"]
+    
+    response = session.get(url, headers = headers, timeout = 10)
+    
+    if response.status_code == 304:
+        print(f"Feed unchanged: {feed_slug}")
+        return None
+    
     response.raise_for_status()
+    
+    etag = response.headers.get("ETag")
+    last_modified = response.headers.get("Last-Modified")
+    update_feed_cache(feed_slug, etag, last_modified)
+
     return response.text
 
 def extract_alert_links(rss_data):
@@ -24,6 +44,10 @@ def extract_alert_links(rss_data):
 
 def get_alert_links(feed_slug):
     rss_data = fetch_rss_feed(feed_slug)
+
+    if not rss_data:
+        return None
+
     return extract_alert_links(rss_data)
 
 def extract_identifer_from_link(link):

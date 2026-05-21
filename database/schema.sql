@@ -53,3 +53,14 @@ CREATE TABLE IF NOT EXISTS alert_districts (
         REFERENCES districts(district_code)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS feed_cache (
+    feed_slug VARCHAR(100) PRIMARY KEY,
+    etag VARCHAR(255),
+
+    last_modified VARCHAR(255),
+
+    updated_at TIMESTAMP
+    DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP
+);

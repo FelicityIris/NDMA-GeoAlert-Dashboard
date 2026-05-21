@@ -16,39 +16,15 @@ CREATE TABLE IF NOT EXISTS districts (
 
 CREATE TABLE IF NOT EXISTS alerts (
     alert_id BIGINT PRIMARY KEY AUTO_INCREMENT,
-	
     alert_identifier VARCHAR(100) NOT NULL UNIQUE,
-	
     state_id INT NOT NULL,
 	
     event VARCHAR(255),
-	
     headline_en TEXT,
-    headline_alt TEXT,
 	
-    urgency ENUM(
-        'Immediate',
-        'Expected',
-        'Future',
-        'Past',
-        'Unknown'
-    ),
-	
-    severity ENUM(
-        'Extreme',
-        'Severe',
-        'Moderate',
-        'Minor',
-        'Unknown'
-    ),
-	
-    certainty ENUM(
-        'Observed',
-        'Likely',
-        'Possible',
-        'Unlikely',
-        'Unknown'
-    ),
+    urgency VARCHAR(50),
+    severity VARCHAR(50),
+    certainty VARCHAR(50),
 	
     effective DATETIME,
     onset DATETIME,

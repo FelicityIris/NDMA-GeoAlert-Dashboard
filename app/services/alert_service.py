@@ -142,3 +142,21 @@ def delete_expired_alerts():
         connection.commit()
     finally:
         connection.close()
+
+def alert_exists(alert_identifier):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT 1
+                FROM alerts
+                WHERE alert_identifier = %s
+                LIMIT 1
+                """,
+                alert_identifier
+            )
+
+            return cursor.fetchone() is not None
+    finally:
+        connection.close()

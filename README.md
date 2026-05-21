@@ -1,4 +1,4 @@
-# NDMA Alerts Filter
+# NDMA GeoAlert Dashboard
 Selectively filtering NDMA Alerts based on Prioritized States
 
 ## Requirements

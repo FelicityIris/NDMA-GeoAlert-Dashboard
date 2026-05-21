@@ -1,16 +1,17 @@
-import requests
 from dateutil import parser
 import xml.etree.ElementTree as ET
+from app.services.http_client import session
+
 
 NAMESPACE = { "cap" : "urn:oasis:names:tc:emergency:cap:1.2" }
 
 def fetch_alert_xml(url):
-    response = requests.get(url, timeout=10)
+    response = session.get(url, timeout=10)
     response.raise_for_status()
     return response.text
 
 def fetch_polygon_xml(url):
-    response = requests.get(url, timeout=10)
+    response = session.get(url, timeout=10)
     response.raise_for_status()
     return response.text
 

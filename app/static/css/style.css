@@ -7,6 +7,10 @@ html, body {
     color: #cdd6f4;
 }
 
+hr {
+    color: #585b70;
+}
+
 .title-menu {
     display: flex;
     background-color: #181825;
@@ -50,6 +54,12 @@ html, body {
 .spec-value {
     background-color: #181825;
     padding: 0.25em;
+}
+
+.no-alerts {
+    padding: 1em;
+    opacity: 0.7;
+    font-style: italic;
 }
 
 .map-container {

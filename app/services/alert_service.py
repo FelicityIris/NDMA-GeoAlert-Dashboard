@@ -100,34 +100,81 @@ def get_all_alerts():
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                SELECT *
-                FROM alerts
-                ORDER BY effective DESC
+                SELECT
+                    state_id,
+                    state_name
+                FROM states
+                WHERE is_selected = TRUE
+                ORDER BY state_name
                 """
             )
-            alerts = cursor.fetchall()
+            states = cursor.fetchall()
 
-            for alert in alerts:
+            state_dashboard = []
+            for state in states:
+                cursor.execute(
+                    """
+                    SELECT
+                        alert_id,
+                        alert_identifier,
+                        event,
+                        headline_en,
+                        urgency,
+                        severity,
+                        certainty,
+                        effective,
+                        onset,
+                        expires
+                    FROM alerts
+                    WHERE state_id = %s
+                    ORDER BY effective DESC
+                    """,
+                    state["state_id"]
+                )
+                alerts = cursor.fetchall()
+
+                for alert in alerts:
+                    cursor.execute(
+                        """
+                        SELECT district_code
+                        FROM alert_districts
+                        WHERE alert_id = %s
+                        """,
+                        (
+                            alert["alert_id"],
+                        )
+                    )
+                    districts = cursor.fetchall()
+
+                    alert["district_codes"] = [district["district_code"] for district in districts]
+
+                state_dashboard.append({ "state_name": state["state_name"], "alerts" : alerts })
+            return state_dashboard
+    finally:
+        connection.close()
+
+def get_polygon_data():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    alert_id,
+                    polygons
+                FROM alerts
+                """
+            )
+            polygon_alerts = cursor.fetchall()
+            for alert in polygon_alerts:
                 if alert["polygons"]:
                     alert["polygons"] = json.loads(alert["polygons"])
                 else:
                     alert["polygons"] = []
-                cursor.execute(
-                    """
-                    SELECT district_code
-                    FROM alert_districts
-                    WHERE alert_id = %s
-                    """,
-                    alert["alert_id"]
-                )
-                districts = cursor.fetchall()
-                alert["district_codes"] = [
-                    district["district_code"]
-                    for district in districts
-                ]
-            return alerts
+            return polygon_alerts
     finally:
         connection.close()
+        
 
 def delete_expired_alerts():
     connection = get_connection()

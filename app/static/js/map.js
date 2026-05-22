@@ -12,7 +12,7 @@ const parse_polygon = (polygon_string) => {
     });
 }
 
-alerts.forEach((alert) => {
+polygon_data.forEach((alert) => {
     if (!alert.polygons) { return; }
 
     alert.polygons.forEach((polygon) => {

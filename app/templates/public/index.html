@@ -7,45 +7,60 @@ Overview
 {% block content %}
 <div class="dashboard">
     <div class="sidebar">    
-    {% for alert in alerts %}
-        <h3>{{ alert.event}}</h3>
-        <sub>ID: {{ alert.alert_identifier }}</sub>
-        <p>{{ alert.headline_en }}</p>
-        <div class="alert-specs">
-            <div class="spec">
-                <label class="spec-label">
-                    Severity
-                </label>
-                <label class="spec-value">
-                    {{ alert.severity }} 
-                </label>
-            </div>
+    {% for state in alerts %}
+        <div class="state-section">
+            <h2 class="state-title">{{ state.state_name }}</h2>
+            <hr>
+            {% if state.alerts %}
+                {% for alert in state.alerts %}
+                <div class="alert-card">
+                    <h3>• {{ alert.event }}</h3>
+                    <sub>{{ alert.identifier }}</sub>
+                    <p>{{ alert.headline_en }}</p>
 
-            <div class="spec">
-                <label class="spec-label">
-                    Urgency
-                </label>
-                <label class="spec-value">
-                    {{ alert.urgency }}
-                </label>
-            </div>
-            
-            <div class="spec">
-                <label class="spec-label">
-                    Certainty
-                </label>
-                <label class="spec-value">
-                    {{ alert.certainty }}
-                </label>
-            </div>
+                    <div class="alert-specs">
+                        <div class="spec">
+                            <label class="spec-label">
+                                Severity
+                            </label>
+                            <label class="spec-value">
+                                {{ alert.severity }}
+                            </label>
+                        </div>
+
+                        <div class="spec">
+                            <label class="spec-label">
+                                Urgency
+                            </label>
+                            <label class="spec-value">
+                                {{ alert.urgency }}
+                            </label>
+                        </div>
+
+                        <div class="spec">
+                            <label class="spec-label">
+                                Certainty
+                            </label>
+                            <label class="spec-value">
+                                {{ alert.certainty }}
+                            </label>
+                        </div>
+                    </div>
+
+                    <p>
+                        Affected Districts:
+                        {% for district_code in alert.district_codes %}
+                            {{ district_code }}
+                        {% endfor %}
+                    </p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-alerts">
+                    No alerts currently active
+                </div>
+            {% endif %}
         </div>
-        <p>
-            Affected Districts:
-            {% for district_code in alert.district_codes %}
-                {{ district_code }}
-            {% endfor %}
-        </p>
-        <hr>
     {% endfor %}
     </div>
 
@@ -55,6 +70,6 @@ Overview
 </div>
 
 <script>
-    const alerts = {{ alerts | tojson }};
+    const polygon_data = {{ polygon_data | tojson }};
 </script>
 {% endblock %}

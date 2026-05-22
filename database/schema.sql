@@ -64,3 +64,11 @@ CREATE TABLE IF NOT EXISTS feed_cache (
     DEFAULT CURRENT_TIMESTAMP
     ON UPDATE CURRENT_TIMESTAMP
 );
+
+-- CREATE INDEX idx_alert_effective ON alerts(effective);
+
+-- CREATE INDEX idx_alert_expires ON alerts(expires);
+
+-- CREATE INDEX idx_alert_state ON alerts(state_id);
+
+-- CREATE INDEX idx_state_selected ON states(is_selected);

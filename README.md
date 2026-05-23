@@ -61,6 +61,10 @@ DB_USER=<mysql_user_name>
 DB_PASSWORD=<mysql_user_password>
 DB_HOST=localhost
 DB_NAME=<mysql_database_name>
+
+# Admin Auth
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD_HASH=<hashed_password>
 ```
 
 ## Run

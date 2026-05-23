@@ -5,7 +5,35 @@ Admin Dashboard
 {% endblock %}
 
 {% block content %}
-<h1>Admin Dashboard</h1>
+<div class="admin-container">
+    <h1>Admin Dashboard</h1>
 
-<p>Admin actions here</p>
+    <form method="POST" action="{{ url_for('admin.update_states') }}">
+        <h2>State Selection</h2>
+
+        <div class="state-list">
+            {% for state in states %}
+            <label class="state-item">
+                <input 
+                    type="checkbox" 
+                    name="selected_states" 
+                    value="{{ state.state_id }}"
+                    {% if state.is_selected %}
+                    checked
+                    {% endif %}
+                >
+                {{ state.state_name }}
+            </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit">Save Selection</button>
+    </form>
+
+    <hr>
+
+    <a href="{{ url_for('admin.admin_ingest') }}">
+        <button>Run Manual Synchronization</button>
+    </a>
+</div>
 {% endblock %}

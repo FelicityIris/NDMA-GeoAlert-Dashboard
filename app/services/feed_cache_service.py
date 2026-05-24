@@ -1,5 +1,6 @@
 from app.services.db import get_connection
 
+
 def get_feed_cache(feed_slug):
     connection = get_connection()
     try:
@@ -12,11 +13,12 @@ def get_feed_cache(feed_slug):
                 FROM feed_cache
                 WHERE feed_slug = %s
                 """,
-                feed_slug
+                feed_slug,
             )
             return cursor.fetchone()
     finally:
         connection.close()
+
 
 def update_feed_cache(feed_slug, etag, last_modified):
     connection = get_connection()
@@ -43,7 +45,7 @@ def update_feed_cache(feed_slug, etag, last_modified):
                     last_modified =
                     VALUES(last_modified)
                 """,
-                (feed_slug, etag, last_modified)
+                (feed_slug, etag, last_modified),
             )
         connection.commit()
     finally:

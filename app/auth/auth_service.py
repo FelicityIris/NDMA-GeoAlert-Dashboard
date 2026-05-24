@@ -1,5 +1,7 @@
 import os
+
 from werkzeug.security import check_password_hash
+
 
 def validate_admin_login(username, password):
     admin_username = os.getenv("ADMIN_USERNAME")
@@ -7,5 +9,5 @@ def validate_admin_login(username, password):
 
     if username != admin_username:
         return False
-    
+
     return check_password_hash(admin_password_hash, password)

@@ -1,10 +1,17 @@
 import time
+
+from app.services.alert_service import (
+    alert_exists,
+    delete_expired_alerts,
+    is_alert_expired,
+    save_alert,
+)
+from app.services.feed_fetcher import extract_identifer_from_link, get_alert_links
 from app.services.state_service import get_selected_states
-from app.services.feed_fetcher import ( get_alert_links, extract_identifer_from_link )
 from app.services.xml_parser import fetch_and_parse_alert
-from app.services.alert_service import ( save_alert, delete_expired_alerts, alert_exists, is_alert_expired )
 
 REUQEST_DELAY_SECONDS = 0.5
+
 
 def ingest_alerts():
     selected_states = get_selected_states()
@@ -39,6 +46,6 @@ def ingest_alerts():
         except Exception as error:
             print(f"Failed feed: {feed_slug}")
             print(error)
-    
+
     delete_expired_alerts()
     print("Alert ingestion complete.")

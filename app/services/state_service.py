@@ -1,8 +1,9 @@
 from app.services.db import get_connection
 
+
 def get_selected_states():
     connection = get_connection()
-    
+
     try:
         with connection.cursor() as cursor:
             sql = """
@@ -15,31 +16,29 @@ def get_selected_states():
     finally:
         connection.close()
 
+
 def get_all_states():
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 SELECT state_id, state_name, is_selected
                 FROM states
                 ORDER BY state_name
-                """
-            )
+                """)
             return cursor.fetchall()
     finally:
         connection.close()
+
 
 def update_selected_states(selected_state_ids):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 UPDATE states
                 SET is_selected = FALSE
-                """
-            )
+                """)
             if selected_state_ids:
                 placeholders = ", ".join(["%s"] * len(selected_state_ids))
                 query = f"""

@@ -1,6 +1,8 @@
-from datetime import datetime
 import json
+from datetime import datetime
+
 from app.services.db import get_connection
+
 
 def save_alert(alert_data, state_id):
     connection = get_connection()
@@ -57,17 +59,17 @@ def save_alert(alert_data, state_id):
                     alert_data["effective"],
                     alert_data["onset"],
                     alert_data["expires"],
-                    polygons_json
-                )
+                    polygons_json,
+                ),
             )
-            
+
             cursor.execute(
                 """
                 SELECT alert_id
                 FROM alerts
                 WHERE alert_identifier = %s
                 """,
-                alert_data["identifier"]
+                alert_data["identifier"],
             )
 
             alert = cursor.fetchone()
@@ -78,36 +80,36 @@ def save_alert(alert_data, state_id):
                 DELETE FROM alert_districts
                 WHERE alert_id = %s
                 """,
-                alert_id
+                alert_id,
             )
 
             for district_code in alert_data["district_codes"]:
-                cursor.execute("""
+                cursor.execute(
+                    """
                     INSERT IGNORE INTO
                     alert_districts (alert_id, district_code)
                     VALUES (%s, %s)
                     """,
-                    (alert_id, district_code)
+                    (alert_id, district_code),
                 )
         connection.commit()
     finally:
         connection.close()
 
+
 def get_all_alerts():
     connection = get_connection()
-    
+
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 SELECT
                     state_id,
                     state_name
                 FROM states
                 WHERE is_selected = TRUE
                 ORDER BY state_name
-                """
-            )
+                """)
             states = cursor.fetchall()
 
             state_dashboard = []
@@ -129,7 +131,7 @@ def get_all_alerts():
                     WHERE state_id = %s
                     ORDER BY effective DESC
                     """,
-                    state["state_id"]
+                    state["state_id"],
                 )
                 alerts = cursor.fetchall()
 
@@ -140,31 +142,32 @@ def get_all_alerts():
                         FROM alert_districts
                         WHERE alert_id = %s
                         """,
-                        (
-                            alert["alert_id"],
-                        )
+                        (alert["alert_id"],),
                     )
                     districts = cursor.fetchall()
 
-                    alert["district_codes"] = [district["district_code"] for district in districts]
+                    alert["district_codes"] = [
+                        district["district_code"] for district in districts
+                    ]
 
-                state_dashboard.append({ "state_name": state["state_name"], "alerts" : alerts })
+                state_dashboard.append(
+                    {"state_name": state["state_name"], "alerts": alerts}
+                )
             return state_dashboard
     finally:
         connection.close()
+
 
 def get_polygon_data():
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 SELECT
                     alert_id,
                     polygons
                 FROM alerts
-                """
-            )
+                """)
             polygon_alerts = cursor.fetchall()
             for alert in polygon_alerts:
                 if alert["polygons"]:
@@ -174,22 +177,21 @@ def get_polygon_data():
             return polygon_alerts
     finally:
         connection.close()
-        
+
 
 def delete_expired_alerts():
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                 DELETE FROM alerts
                 WHERE expires IS NOT NULL
                 AND expires < NOW()
-                """
-            )
+                """)
         connection.commit()
     finally:
         connection.close()
+
 
 def alert_exists(alert_identifier):
     connection = get_connection()
@@ -202,12 +204,13 @@ def alert_exists(alert_identifier):
                 WHERE alert_identifier = %s
                 LIMIT 1
                 """,
-                alert_identifier
+                alert_identifier,
             )
 
             return cursor.fetchone() is not None
     finally:
         connection.close()
+
 
 def is_alert_expired(alert_data):
     expires = alert_data.get("expires")

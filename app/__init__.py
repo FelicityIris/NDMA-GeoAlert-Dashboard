@@ -1,8 +1,10 @@
-from flask import Flask
-from dotenv import load_dotenv
 import os
 
+from dotenv import load_dotenv
+from flask import Flask
+
 from app.services.init_db import initialize_database
+
 
 def create_app():
     load_dotenv()
@@ -13,8 +15,8 @@ def create_app():
 
     initialize_database()
 
-    from app.routes.public_routes import public_bp
     from app.routes.admin_routes import admin_bp
+    from app.routes.public_routes import public_bp
 
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp)

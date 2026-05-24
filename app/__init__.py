@@ -7,7 +7,9 @@ from app.services.init_db import initialize_database
 
 
 def create_app():
-    load_dotenv()
+    loaded = load_dotenv()
+    if not loaded:
+        print("Warning: .env file not found")
 
     app = Flask(__name__)
 

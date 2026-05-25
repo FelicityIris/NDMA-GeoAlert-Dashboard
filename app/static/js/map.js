@@ -53,12 +53,13 @@ document.querySelectorAll(".alert-card").forEach((card) => {
             });
             active_layers = [];
             
+            const combined_bounds = L.latLngBounds();
             layers.forEach((layer) => {
-
                 layer.setStyle({ weight: 4, fillOpacity: 0.4 });
                 active_layers.push(layer);
-                map.fitBounds(layer.getBounds());
+                combined_bounds.extend(layer.getBounds())
             });
+            map.fitBounds(combined_bounds);
         }
     );
 });

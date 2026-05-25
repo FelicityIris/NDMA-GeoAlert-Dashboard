@@ -13,7 +13,7 @@ Overview
             <hr>
             {% if state.alerts %}
                 {% for alert in state.alerts %}
-                <div class="alert-card">
+                <div class="alert-card" data-alert-id="{{ alert.alert_id }}"">
                     <h3>• {{ alert.event }}</h3>
                     <sub>{{ alert.identifier }}</sub>
                     <p>{{ alert.headline_en }}</p>

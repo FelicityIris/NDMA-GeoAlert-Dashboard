@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
 
 from app.services.alert_service import get_all_alerts, get_polygon_data
-from app.services.ingestion_service import ingest_alerts
 
 public_bp = Blueprint("public", __name__)
 

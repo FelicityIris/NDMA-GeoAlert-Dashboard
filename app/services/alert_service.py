@@ -138,16 +138,18 @@ def get_all_alerts():
                 for alert in alerts:
                     cursor.execute(
                         """
-                        SELECT district_code
+                        SELECT districts.district_name
                         FROM alert_districts
-                        WHERE alert_id = %s
+                        JOIN districts
+                        ON alert_districts.district_code = districts.district_code
+                        WHERE alert_districts.alert_id = %s
                         """,
-                        (alert["alert_id"],),
+                        alert["alert_id"],
                     )
                     districts = cursor.fetchall()
 
-                    alert["district_codes"] = [
-                        district["district_code"] for district in districts
+                    alert["district_names"] = [
+                        district["district_name"] for district in districts
                     ]
 
                 state_dashboard.append(

@@ -64,3 +64,16 @@ document.querySelectorAll(".alert-card").forEach((card) => {
     );
 });
 
+document.querySelectorAll(".alert-card").forEach((card) => {
+        card.addEventListener(
+            "toggle",
+            () => {
+
+                if (!card.open) { return; }
+
+                document.querySelectorAll(".alert-card").forEach((otherCard) => {
+                        if (otherCard !== card) { otherCard.open = false; }
+                    });
+            }
+        );
+    });

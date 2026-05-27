@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100vh;
     width: 100vw;
     margin: 0;
@@ -80,14 +81,12 @@ hr {
 .alert-card:hover {
     border-color: #585b70;
     transform: translateY(-2px);
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .alert-card[open] {
     border-color: #7f849c;
-    transition:
-        transform 1s ease,
+    transition: transform 1s ease;
 }
 
 .alert-summary {
@@ -158,8 +157,7 @@ hr {
 .alert-details {
     display: grid;
     grid-template-rows: 0fr;
-    transition:
-        grid-template-rows 0.3s ease;
+    transition: grid-template-rows 0.3s ease;
     background: #11111b;
 }
 
@@ -176,11 +174,7 @@ hr {
 }
 
 .alert-card[open] .alert-details {
-    padding:
-        0
-        1.2rem
-        1.2rem
-        1.2rem;
+    padding: 0 1.2rem 1.2rem 1.2rem;
 }
 
 .alert-headline-box {
@@ -208,8 +202,7 @@ hr {
 
 .alert-detail-grid {
     display: grid;
-    grid-template-columns:
-        repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 0.75rem;
 }
 
@@ -242,9 +235,7 @@ hr {
 }
 
 .district-tag {
-    padding:
-        0.45rem
-        0.8rem;
+    padding: 0.45rem 0.8rem;
     border-radius: 999px;
     background: #313244;
     color: #cdd6f4;
@@ -327,18 +318,191 @@ hr {
 /* Admin Dashboard */
 
 .admin-container {
+    max-width: 1100px;
+    margin: 0 auto;
     padding: 2rem;
 }
 
-.state-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+.admin-header {
     margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+    margin: 0;
+    color: #f5f5f7;
+    font-size: 2rem;
+}
+
+.admin-header p {
+    margin-top: 0.5rem;
+    color: #7f849c;
+}
+
+.admin-card {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: #181825;
+    border: 1px solid #313244;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.admin-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.admin-card-header h2 {
+    margin: 0;
+    color: #f5f5f7;
+}
+
+.admin-card-header p {
+    margin-top: 0.35rem;
+    color: #7f849c;
+    font-size: 0.92rem;
+}
+
+.expand-button,
+.primary-button,
+.sync-button {
+    border: none;
+    border-radius: 14px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.expand-button:hover,
+.primary-button:hover,
+.sync-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.expand-button {
+    background: #313244;
+    color: #cdd6f4;
+}
+
+.primary-button {
+    background: #89b4fa;
+    color: #11111b;
+}
+
+.sync-button {
+    background: #a6e3a1;
+    color: #11111b;
+}
+
+.selected-state-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.selected-state-tag {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: #313244;
+    color: #cdd6f4;
+    font-size: 0.85rem;
+}
+
+.state-editor {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease,
+        margin-top 0.2s ease;
+}
+
+.state-editor.expanded {
+    max-height: 1000px;
+    opacity: 1;
+    margin-top: 1.5rem;
+}
+
+.state-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
 }
 
 .state-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border-radius: 14px;
+    background: #1e1e2e;
+    border: 1px solid #313244;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+.state-item:hover {
+    border-color: #585b70;
+    background: #24273a;
+}
+
+.state-item span {
+    color: #cdd6f4;
+}
+
+.state-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.sticky-save-container {
+    position: sticky;
+    bottom: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    background: linear-gradient(to top, #181825 70%, transparent);
+}
+
+.sync-link {
+    text-decoration: none;
+}
+
+.admin-header-actions {
+    margin-top: 1rem;
+}
+
+.logout-link {
+    text-decoration: none;
+}
+
+.logout-button {
+    border: none;
+    border-radius: 14px;
+    padding: 0.75rem 1.1rem;
+    background: #f38ba8;
+    color: #11111b;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.logout-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
 }

@@ -1,39 +1,69 @@
-{% extends "base.html" %}
-
-{% block title %}
-Admin Dashboard
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %} Admin Dashboard {% endblock %} {% block content %}
 <div class="admin-container">
-    <h1>Admin Dashboard</h1>
-
-    <form method="POST" action="{{ url_for('admin.update_states') }}">
-        <h2>State Selection</h2>
-
-        <div class="state-list">
-            {% for state in states %}
-            <label class="state-item">
-                <input 
-                    type="checkbox" 
-                    name="selected_states" 
-                    value="{{ state.state_id }}"
-                    {% if state.is_selected %}
-                    checked
-                    {% endif %}
-                >
-                {{ state.state_name }}
-            </label>
-            {% endfor %}
+    <div class="admin-header">
+        <div>
+            <h1>Admin Dashboard</h1>
+            <p>Manage monitored states and operational synchronization controls.</p>
+            <div class="admin-header-actions">
+                <a href="{{ url_for('admin.admin_logout') }}" class="logout-link">
+                    <button class="logout-button">Logout</button>
+                </a>
+            </div>
         </div>
-
-        <button type="submit">Save Selection</button>
-    </form>
-
-    <hr>
-
-    <a href="{{ url_for('admin.admin_ingest') }}">
-        <button>Run Manual Synchronization</button>
-    </a>
+    </div>
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <div>
+                <h2>Prioritized States</h2>
+                <p>Currently selected states for CAP feed monitoring.</p>
+            </div>
+            <button type="button" class="expand-button" id="toggle-state-editor">Edit State Prioritization</button>
+        </div>
+        <div class="selected-state-tags">
+            {% for state in states %} {% if state.is_selected %}
+            <span class="selected-state-tag"> {{ state.state_name }} </span>
+            {% endif %} {% endfor %}
+        </div>
+        <div class="state-editor" id="state-editor">
+            <form method="POST" action="{{ url_for('admin.update_states') }}">
+                <div class="state-list">
+                    {% for state in states %}
+                    <label class="state-item">
+                        <input
+                            type="checkbox"
+                            name="selected_states"
+                            value="{{ state.state_id }}"
+                            {% if state.is_selected %} checked {% endif %} />
+                        <span> {{ state.state_name }} </span>
+                    </label>
+                    {% endfor %}
+                </div>
+                <div class="sticky-save-container">
+                    <button type="submit" class="primary-button">Save State Prioritization</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <div>
+                <h2>Manual Synchronization</h2>
+                <p>Trigger immediate CAP feed synchronization across selected states.</p>
+            </div>
+        </div>
+        <a href="{{ url_for('admin.admin_ingest') }}" class="sync-link">
+            <button class="sync-button">Run Manual Synchronization</button>
+        </a>
+    </div>
 </div>
+<script>
+    const toggleButton = document.getElementById("toggle-state-editor");
+    const stateEditor = document.getElementById("state-editor");
+    toggleButton.addEventListener("click", () => {
+        stateEditor.classList.toggle("expanded");
+        toggleButton.textContent = stateEditor.classList.contains("expanded")
+            ? "Close State Editor"
+            : "Edit State Prioritization";
+    });
+</script>
 {% endblock %}

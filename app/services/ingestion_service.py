@@ -10,7 +10,7 @@ from app.services.feed_fetcher import extract_identifer_from_link, get_alert_lin
 from app.services.state_service import get_selected_states
 from app.services.xml_parser import fetch_and_parse_alert
 
-REUQEST_DELAY_SECONDS = 0.5
+REQUEST_DELAY_SECONDS = 1
 
 
 def ingest_alerts():
@@ -30,16 +30,16 @@ def ingest_alerts():
                     identifier = extract_identifer_from_link(link)
                     if alert_exists(identifier):
                         print(f"Skipping existing alert: {identifier}")
-                        time.sleep(REUQEST_DELAY_SECONDS)
+                        time.sleep(REQUEST_DELAY_SECONDS)
                         continue
                     alert_data = fetch_and_parse_alert(link)
                     if is_alert_expired(alert_data):
                         print(f"Skipping expired alert: {alert_data['identifier']}")
-                        time.sleep(REUQEST_DELAY_SECONDS)
+                        time.sleep(REQUEST_DELAY_SECONDS)
                         continue
                     save_alert(alert_data, state_id)
                     print(f"Saved alert: {alert_data['identifier']}")
-                    time.sleep(REUQEST_DELAY_SECONDS)
+                    time.sleep(REQUEST_DELAY_SECONDS)
                 except Exception as error:
                     print(f"Failed alert: {link}")
                     print(error)

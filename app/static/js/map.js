@@ -2,20 +2,24 @@ const map = L.map("map").setView([22.9734, 78.6569], 5);
 const polygon_layers = {};
 let active_layers = [];
 
-L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    { attribution: "&copy; OpenStreetMap contributors" }
-).addTo(map)
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors"
+}).addTo(map);
 
 const parse_polygon = (polygon_string) => {
-    return polygon_string.trim().split(" ").map((coordinate_pair) => {
-        const [lat, lng] = coordinate_pair.split(",").map(Number);
-        return [lat, lng];
-    });
-}
+    return polygon_string
+        .trim()
+        .split(" ")
+        .map((coordinate_pair) => {
+            const [lat, lng] = coordinate_pair.split(",").map(Number);
+            return [lat, lng];
+        });
+};
 
 polygon_data.forEach((alert) => {
-    if (!alert.polygons) { return; }
+    if (!alert.polygons) {
+        return;
+    }
 
     polygon_layers[alert.alert_id] = [];
 
@@ -30,37 +34,40 @@ polygon_data.forEach((alert) => {
         try {
             // Render on map
             const coordinates = parse_polygon(polygon);
-            const polygon_layer = L.polygon(coordinates, { weight: 2, color: polygon_color, opacity: 0.8, fillOpacity: 0.2 }).addTo(map);
-            
+            const polygon_layer = L.polygon(coordinates, {
+                weight: 2,
+                color: polygon_color,
+                opacity: 0.8,
+                fillOpacity: 0.2
+            }).addTo(map);
+
             // Open associated card
-            polygon_layer.on(
-                "click",
-                () => {
-                    const alert_card = document.getElementById(`alert-card-${alert.alert_id}`);
+            polygon_layer.on("click", () => {
+                const alert_card = document.getElementById(`alert-card-${alert.alert_id}`);
 
-                    if (!alert_card) { return; }
-
-                    document.querySelectorAll(".alert-card").forEach((card) => {
-                        if (card !== alert_card) { card.open = false; }
-                    });
-
-                    alert_card.open = true;
-
-                    alert_card.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
-
-                    alert_card.classList.add("alert-card-active");
-
-                    setTimeout(
-                        () => {
-                            alert_card.classList.remove("alert-card-active");
-                        },
-                        1500
-                    );
+                if (!alert_card) {
+                    return;
                 }
-            );
+
+                document.querySelectorAll(".alert-card").forEach((card) => {
+                    if (card !== alert_card) {
+                        card.open = false;
+                    }
+                });
+
+                alert_card.open = true;
+
+                alert_card.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                alert_card.classList.add("alert-card-active");
+
+                setTimeout(() => {
+                    alert_card.classList.remove("alert-card-active");
+                }, 1500);
+            });
 
             polygon_layers[alert.alert_id].push(polygon_layer);
         } catch (error) {
@@ -70,40 +77,107 @@ polygon_data.forEach((alert) => {
 });
 
 document.querySelectorAll(".alert-card").forEach((card) => {
-    card.addEventListener(
-        "click",
-        () => {
-            const alert_id = card.dataset.alertId;
-            const layers = polygon_layers[alert_id];
+    card.addEventListener("click", () => {
+        const alert_id = card.dataset.alertId;
+        const layers = polygon_layers[alert_id];
 
-            if (!layers) { return; }
-
-            active_layers.forEach((layer) => {
-                layer.setStyle({ weight: 2, fillOpacity: 0.2 });
-            });
-            active_layers = [];
-            
-            const combined_bounds = L.latLngBounds();
-            layers.forEach((layer) => {
-                layer.setStyle({ weight: 4, fillOpacity: 0.4 });
-                active_layers.push(layer);
-                combined_bounds.extend(layer.getBounds())
-            });
-            map.fitBounds(combined_bounds);
+        if (!layers) {
+            return;
         }
-    );
+
+        active_layers.forEach((layer) => {
+            layer.setStyle({ weight: 2, fillOpacity: 0.2 });
+        });
+        active_layers = [];
+
+        const combined_bounds = L.latLngBounds();
+        layers.forEach((layer) => {
+            layer.setStyle({ weight: 4, fillOpacity: 0.4 });
+            active_layers.push(layer);
+            combined_bounds.extend(layer.getBounds());
+        });
+        map.fitBounds(combined_bounds);
+    });
 });
 
 document.querySelectorAll(".alert-card").forEach((card) => {
-        card.addEventListener(
-            "toggle",
-            () => {
+    card.addEventListener("toggle", () => {
+        if (!card.open) {
+            return;
+        }
 
-                if (!card.open) { return; }
-
-                document.querySelectorAll(".alert-card").forEach((otherCard) => {
-                        if (otherCard !== card) { otherCard.open = false; }
-                    });
+        document.querySelectorAll(".alert-card").forEach((otherCard) => {
+            if (otherCard !== card) {
+                otherCard.open = false;
             }
-        );
+        });
     });
+});
+
+project_sites.forEach((site) => {
+    const marker_color = "#583470";
+    const marker_style = `
+        background-color: ${marker_color};
+        width: 1.5rem;
+        height: 1.5rem;
+        display: block;
+        left: -1.5rem;
+        top: -1.5rem;
+        position: relative;
+        border-radius: 3rem 4rem 0;
+        transform: rotate(45deg);
+        border: 1px solid #FFFFFF;
+    `;
+    const project_icon = L.divIcon({
+        className: "project-icon",
+        iconAnchor: [0, 24],
+        labelAnchor: [-6, 0],
+        popupAnchor: [0, -36],
+        html: `<div style="${marker_style}"><div/>`
+    });
+    const marker = L.marker([site.lat, site.lng], { icon: project_icon }).addTo(map);
+    marker.bindPopup(
+        `
+        <b>Project Site</b>
+        <br>
+        ${site.project_name}
+        <br>
+        ID:
+        ${site.project_id}
+        `
+    );
+});
+
+gnd_sites.forEach((site) => {
+    const marker_color = "#347058";
+    const marker_style = `
+        background-color: ${marker_color};
+        width: 1.5rem;
+        height: 1.5rem;
+        display: block;
+        left: -1.5rem;
+        top: -1.5rem;
+        position: relative;
+        border-radius: 3rem 4rem 0;
+        transform: rotate(45deg);
+        border: 1px solid #FFFFFF;
+    `;
+    const gnd_icon = L.divIcon({
+        className: "gnd-icon",
+        iconAnchor: [0, 24],
+        labelAnchor: [-6, 0],
+        popupAnchor: [0, -36],
+        html: `<div style="${marker_style}"></div>`
+    });
+    const marker = L.marker([site.lat, site.lng], { icon: gnd_icon }).addTo(map);
+    marker.bindPopup(
+        `
+            <b>GND Site</b>
+            <br>
+            ${site.site_name}
+            <br>
+            Project ID:
+            ${site.project_id}
+            `
+    );
+});

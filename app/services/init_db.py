@@ -56,17 +56,69 @@ def seed_districts(cursor):
             cursor.execute(sql, (int(row["district_code"]), row["district_name"]))
 
 
+def seed_gnd_sites(cursor):
+    with open(DATA_DIR / "gnd_sites.csv", newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            sql = """
+                INSERT IGNORE INTO gnd_sites (site_name, project_id, lat, lng)
+                VALUES (%s, %s, %s, %s)
+            """
+
+            project_id = None
+            if row["project_id"] != "NULL":
+                project_id = int(row["project_id"])
+
+            if (row["lat"] == "NULL") or (row["lng"] == "NULL"):
+                continue
+
+            cursor.execute(
+                sql,
+                (
+                    row["site_name"],
+                    project_id,
+                    float(row["lat"]),
+                    float(row["lng"]),
+                ),
+            )
+
+
+def seed_project_sites(cursor):
+    with open(DATA_DIR / "project_sites.csv", newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            sql = """
+                INSERT IGNORE INTO project_sites (project_id, project_name, lat, lng)
+                VALUES (%s, %s, %s, %s)
+            """
+            cursor.execute(
+                sql,
+                (
+                    int(row["project_id"]),
+                    row["project_name"],
+                    float(row["lat"]),
+                    float(row["lng"]),
+                ),
+            )
+
+
 def seed_database():
     connection = get_connection()
 
     try:
         with connection.cursor() as cursor:
             if table_is_empty(cursor, "states"):
-                print("Seeding states...")
+                print("Seeding States Data...")
                 seed_states(cursor)
             if table_is_empty(cursor, "districts"):
-                print("Seeding districts...")
+                print("Seeding Districts Data...")
                 seed_districts(cursor)
+            if table_is_empty(cursor, table_name="gnd_sites"):
+                print("Seeding GND Sites Data...")
+                seed_gnd_sites(cursor)
+            if table_is_empty(cursor, table_name="project_sites"):
+                print("Seeding Project Sites Data...")
+                seed_project_sites(cursor)
         connection.commit()
     finally:
         connection.close()

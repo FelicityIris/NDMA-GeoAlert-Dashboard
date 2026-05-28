@@ -14,6 +14,25 @@ CREATE TABLE IF NOT EXISTS districts (
     district_name VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS project_sites (
+    project_id INT PRIMARY KEY,
+    project_name VARCHAR(100) NOT NULL,
+    lat DOUBLE,
+    lng DOUBLE
+);
+
+CREATE TABLE IF NOT EXISTS gnd_sites (
+    site_id INT PRIMARY KEY AUTO_INCREMENT,
+    site_name VARCHAR(100) NOT NULL,
+    project_id INT,
+    lat DOUBLE,
+    lng DOUBLE,
+
+    FOREIGN KEY (project_id)
+        REFERENCES project_sites(project_id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS alerts (
     alert_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     alert_identifier VARCHAR(100) NOT NULL UNIQUE,

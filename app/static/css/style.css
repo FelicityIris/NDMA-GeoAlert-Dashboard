@@ -89,6 +89,14 @@ hr {
     transition: transform 1s ease;
 }
 
+.alert-card-active {
+    border-color: #89b4fa !important;
+    box-shadow:
+        0 0 0 2px rgba(137, 180, 250, 0.25),
+        0 12px 32px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px);
+}
+
 .alert-summary {
     display: flex;
     justify-content: space-between;

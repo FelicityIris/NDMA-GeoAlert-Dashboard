@@ -15,7 +15,11 @@
 
             {% if state.alerts %}
             {% for alert in state.alerts %}
-            <details class="alert-card" data-alert-id="{{ alert.alert_id }}">
+            <details
+                class="alert-card"
+                id="alert-card-{{ alert.alert_id }}"
+                data-alert-id="{{ alert.alert_id }}"
+            >
                 <summary class="alert-summary">
                     <div class="alert-summary-left">
                         <div class="severity-indicator severity-{{ alert.severity | lower }}"></div>

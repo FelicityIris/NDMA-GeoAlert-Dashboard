@@ -26,12 +26,42 @@ polygon_data.forEach((alert) => {
     else if (alert.severity === "Minor") polygon_color = "yellow";
     else polygon_color = "#3388ff";
 
-    console.log(alert.severity);
-
     alert.polygons.forEach((polygon) => {
         try {
+            // Render on map
             const coordinates = parse_polygon(polygon);
             const polygon_layer = L.polygon(coordinates, { weight: 2, color: polygon_color, opacity: 0.8, fillOpacity: 0.2 }).addTo(map);
+            
+            // Open associated card
+            polygon_layer.on(
+                "click",
+                () => {
+                    const alert_card = document.getElementById(`alert-card-${alert.alert_id}`);
+
+                    if (!alert_card) { return; }
+
+                    document.querySelectorAll(".alert-card").forEach((card) => {
+                        if (card !== alert_card) { card.open = false; }
+                    });
+
+                    alert_card.open = true;
+
+                    alert_card.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+                    alert_card.classList.add("alert-card-active");
+
+                    setTimeout(
+                        () => {
+                            alert_card.classList.remove("alert-card-active");
+                        },
+                        1500
+                    );
+                }
+            );
+
             polygon_layers[alert.alert_id].push(polygon_layer);
         } catch (error) {
             console.error("Polygon parse failed:", error);

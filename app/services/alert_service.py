@@ -182,6 +182,31 @@ def get_polygon_data():
     finally:
         connection.close()
 
+def get_active_alerts():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                    SELECT
+                        alert_id,
+                        alert_identifier,
+                        event,
+                        severity,
+                        expires,
+                        polygons
+                    FROM alerts
+                """
+            )
+            alerts = cursor.fetchall()
+            for alert in alerts:
+                if alert["polygons"]:
+                    alert["polygons"] = json.loads(alert["polygons"])
+                else:
+                    alert["polygons"] = []
+            return alerts
+    finally:
+        connection.close()
 
 def delete_expired_alerts():
     connection = get_connection()

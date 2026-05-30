@@ -2,6 +2,7 @@ from pyproj import Geod
 from shapely.geometry import Point, Polygon
 
 from app.services.alert_service import get_active_alerts
+from app.services.db import get_connection
 from app.services.site_service import get_gnd_sites, get_project_sites
 
 GEOD = Geod(ellps="WGS84")
@@ -78,10 +79,56 @@ def generate_warnings():
                     "site_type": site["site_type"],
                     "site_name": site["site_name"],
                     "alert_id": alert["alert_id"],
-                    "alert_identifer": alert["alert_identifier"],
                     "event": alert["event"],
                     "severity": alert["severity"],
                     **warning
                 })
 
     return warnings
+
+def refresh_warnings():
+    warnings = generate_warnings()
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM warnings")
+            for warning in warnings:
+                cursor.execute(
+                    """
+                        INSERT INTO warnings (
+                            alert_id,
+                            site_type,
+                            site_name,
+                            warning_type,
+                            distance_km
+                        )
+                        VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (
+                        warning["alert_id"],
+                        warning["site_type"],
+                        warning["site_name"],
+                        warning["warning_type"],
+                        warning["distance_km"]
+                    )
+                )
+        connection.commit()
+    finally:
+        connection.close()
+
+def get_warnings():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                    SELECT *
+                    FROM warnings
+                    ORDER BY
+                        warning_type,
+                        distance_km
+                """
+            )
+            return cursor.fetchall()
+    finally:
+        connection.close()

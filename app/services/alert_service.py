@@ -190,7 +190,6 @@ def get_active_alerts():
                 """
                     SELECT
                         alert_id,
-                        alert_identifier,
                         event,
                         severity,
                         expires,

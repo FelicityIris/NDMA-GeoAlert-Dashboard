@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template
 
 from app.services.alert_service import get_all_alerts, get_polygon_data
 from app.services.site_service import get_gnd_sites, get_project_sites
-from app.services.warning_service import generate_warnings
+from app.services.warning_service import get_warnings
 
 public_bp = Blueprint("public", __name__)
 
@@ -24,4 +24,4 @@ def home():
 
 @public_bp.route("/warnings")
 def warnings():
-    return jsonify(generate_warnings())
+    return jsonify(get_warnings())

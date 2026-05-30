@@ -73,6 +73,28 @@ CREATE TABLE IF NOT EXISTS alert_districts (
         ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS warnings (
+    warning_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    alert_id BIGINT NOT NULL,
+
+    site_type ENUM('PROJECT', 'GND') NOT NULL,
+    site_name VARCHAR(255) NOT NULL,
+
+    warning_type ENUM(
+        'INSIDE_ALERT_POLYGON',
+        'NEAR_ALERT_POLYGON'
+    ) NOT NULL,
+
+    distance_km DOUBLE NOT NULL,
+
+    created_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (alert_id)
+        REFERENCES alerts(alert_id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS feed_cache (
     feed_slug VARCHAR(100) PRIMARY KEY,
     etag VARCHAR(255),

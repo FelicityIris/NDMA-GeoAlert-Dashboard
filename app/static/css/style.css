@@ -41,6 +41,43 @@ hr {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
+.sidebar-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sidebar-tab {
+    flex: 1;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 12px;
+    background: #11111b;
+    color: #a6adc8;
+    cursor: pointer;
+    font-weight: 600;
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+.sidebar-tab:hover {
+    background: #313244;
+}
+
+.sidebar-tab.active {
+    background: #89b4fa;
+    color: #11111b;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 .state-section {
     margin-bottom: 2rem;
 }

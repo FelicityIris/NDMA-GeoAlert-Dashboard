@@ -5,122 +5,142 @@
 {% block content %}
 <div class="dashboard">
     <div class="sidebar">
-        {% for state in alerts %}
-        <div class="state-section">
-            <div class="state-header">
-                <h2 class="state-title">{{ state.state_name }}</h2>
+        <div class="sidebar-tabs">
+            <button class="sidebar-tab active" data-tab="alerts">
+                Alerts
+            </button>
 
-                <span class="state-alert-count"> {{ state.alerts | length }} </span>
-            </div>
+            <button class="sidebar-tab" data-tab="warnings">
+                Warnings
+            </button>
+        </div>
 
-            {% if state.alerts %}
-            {% for alert in state.alerts %}
-            <details
-                class="alert-card"
-                id="alert-card-{{ alert.alert_id }}"
-                data-alert-id="{{ alert.alert_id }}"
-            >
-                <summary class="alert-summary">
-                    <div class="alert-summary-left">
-                        <div class="severity-indicator severity-{{ alert.severity | lower }}"></div>
+        <div id="alerts-tab" class="tab-content active">
+            {% for state in alerts %}
+            <div class="state-section">
+                <div class="state-header">
+                    <h2 class="state-title">{{ state.state_name }}</h2>
 
-                        <div class="alert-summary-text">
-                            <div class="alert-title-row">
-                                <h3 class="alert-event">{{ alert.event }}</h3>
+                    <span class="state-alert-count"> {{ state.alerts | length }} </span>
+                </div>
 
-                                <span class="alert-identifier"> {{ alert.alert_identifier }} </span>
+                {% if state.alerts %}
+                {% for alert in state.alerts %}
+                <details
+                    class="alert-card"
+                    id="alert-card-{{ alert.alert_id }}"
+                    data-alert-id="{{ alert.alert_id }}"
+                >
+                    <summary class="alert-summary">
+                        <div class="alert-summary-left">
+                            <div class="severity-indicator severity-{{ alert.severity | lower }}"></div>
+
+                            <div class="alert-summary-text">
+                                <div class="alert-title-row">
+                                    <h3 class="alert-event">{{ alert.event }}</h3>
+
+                                    <span class="alert-identifier"> {{ alert.alert_identifier }} </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="alert-summary-right">
-                        {% if alert.expires %}
-                        <div class="alert-expiry">
-                            <label> Valid Until </label>
-
-                            <span> {{ alert.expires.strftime("%d %b %Y, %I:%M %p") }} </span>
-                        </div>
-                        {% endif %}
-                    </div>
-                </summary>
-
-                <div class="alert-details">
-                    <div class="alert-headline-box">{{ alert.headline_en }}</div>
-
-                    <div class="detail-section">
-                        <div class="detail-section-title">Alert Classification</div>
-
-                        <div class="alert-detail-grid">
-                            <div class="detail-item">
-                                <label> Severity </label>
-
-                                <span> {{ alert.severity }} </span>
-                            </div>
-
-                            <div class="detail-item">
-                                <label> Urgency </label>
-
-                                <span> {{ alert.urgency }} </span>
-                            </div>
-
-                            <div class="detail-item">
-                                <label> Certainty </label>
-
-                                <span> {{ alert.certainty }} </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-section">
-                        <div class="detail-section-title">Timeline</div>
-
-                        <div class="alert-detail-grid">
-                            {% if alert.effective %}
-                            <div class="detail-item">
-                                <label> Effective </label>
-
-                                <span> {{ alert.effective.strftime("%d %b %Y, %I:%M %p") }} </span>
-                            </div>
-                            {% endif %}
-                            
-                            {% if alert.onset %}
-                            <div class="detail-item">
-                                <label> Onset </label>
-
-                                <span> {{ alert.onset.strftime("%d %b %Y, %I:%M %p") }} </span>
-                            </div>
-                            {% endif %}
-                            
+                        <div class="alert-summary-right">
                             {% if alert.expires %}
-                            <div class="detail-item">
-                                <label> Expires </label>
+                            <div class="alert-expiry">
+                                <label> Valid Until </label>
 
                                 <span> {{ alert.expires.strftime("%d %b %Y, %I:%M %p") }} </span>
                             </div>
                             {% endif %}
                         </div>
-                    </div>
+                    </summary>
 
-                    {% if alert.district_names %}
-                    <div class="detail-section">
-                        <div class="detail-section-title">Affected Districts</div>
+                    <div class="alert-details">
+                        <div class="alert-headline-box">{{ alert.headline_en }}</div>
 
-                        <div class="district-tags">
-                            {% for district in alert.district_names %}
-                            <span class="district-tag"> {{ district }} </span>
-                            {% endfor %}
+                        <div class="detail-section">
+                            <div class="detail-section-title">Alert Classification</div>
+
+                            <div class="alert-detail-grid">
+                                <div class="detail-item">
+                                    <label> Severity </label>
+
+                                    <span> {{ alert.severity }} </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <label> Urgency </label>
+
+                                    <span> {{ alert.urgency }} </span>
+                                </div>
+
+                                <div class="detail-item">
+                                    <label> Certainty </label>
+
+                                    <span> {{ alert.certainty }} </span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </details>
 
+                        <div class="detail-section">
+                            <div class="detail-section-title">Timeline</div>
+
+                            <div class="alert-detail-grid">
+                                {% if alert.effective %}
+                                <div class="detail-item">
+                                    <label> Effective </label>
+
+                                    <span> {{ alert.effective.strftime("%d %b %Y, %I:%M %p") }} </span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if alert.onset %}
+                                <div class="detail-item">
+                                    <label> Onset </label>
+
+                                    <span> {{ alert.onset.strftime("%d %b %Y, %I:%M %p") }} </span>
+                                </div>
+                                {% endif %}
+                                
+                                {% if alert.expires %}
+                                <div class="detail-item">
+                                    <label> Expires </label>
+
+                                    <span> {{ alert.expires.strftime("%d %b %Y, %I:%M %p") }} </span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if alert.district_names %}
+                        <div class="detail-section">
+                            <div class="detail-section-title">Affected Districts</div>
+
+                            <div class="district-tags">
+                                {% for district in alert.district_names %}
+                                <span class="district-tag"> {{ district }} </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </details>
+
+                {% endfor %}
+                {% else %}
+                <div class="no-alerts">No alerts currently active</div>
+                {% endif %}
+            </div>
             {% endfor %}
-            {% else %}
-            <div class="no-alerts">No alerts currently active</div>
-            {% endif %}
         </div>
-        {% endfor %}
+
+        <div id="warnings-tab" class="tab-content">
+            <div class="state-section">
+                <div class="no-alerts">
+                    Warnings
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="map-container">
@@ -132,5 +152,23 @@
     const polygon_data = {{ polygon_data | tojson }};
     const project_sites =  {{ project_sites | tojson }};
     const gnd_sites = {{ gnd_sites | tojson }};
+</script>
+
+<script>
+    document.querySelectorAll(".sidebar-tab").forEach((button) => {
+        button.addEventListener(
+            "click",
+            () => {
+                document.querySelectorAll(".sidebar-tab").forEach((tab) => {
+                    tab.classList.remove("active");
+                });
+                document.querySelectorAll(".tab-content").forEach((content) => {
+                    content.classList.remove("active");
+                });
+                button.classList.add("active");
+                document.getElementById(`${button.dataset.tab}-tab`).classList.add("active");
+            }
+        );
+    });
 </script>
 {% endblock %}

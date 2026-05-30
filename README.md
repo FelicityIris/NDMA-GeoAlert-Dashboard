@@ -74,6 +74,7 @@ DB_HOST=localhost
 DB_NAME=<mysql_database_name>
 
 # Admin Auth
+# Generate using `python ./scripts/generate_password_hash.py`
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD_HASH=<hashed_password>
 ```

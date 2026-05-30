@@ -13,13 +13,15 @@ def home():
     polygon_data = get_polygon_data()
     project_sites = get_project_sites()
     gnd_sites = get_gnd_sites()
+    warnings = get_warnings()
 
     return render_template(
         "public/index.html",
         alerts=alerts,
         polygon_data=polygon_data,
         project_sites=project_sites,
-        gnd_sites=gnd_sites
+        gnd_sites=gnd_sites,
+        warnings=warnings
     )
 
 @public_bp.route("/warnings")

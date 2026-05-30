@@ -78,6 +78,8 @@ hr {
     display: block;
 }
 
+/* Alerts */
+
 .state-section {
     margin-bottom: 2rem;
 }
@@ -325,6 +327,69 @@ hr {
 .severity-unknown {
     background: #89b4fa;
 }
+
+/* Warnings */
+
+.warning-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 18px;
+    border: 1px solid #313244;
+    background: #1e1e2e;
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.warning-card:hover {
+    transform: translateY(-2px);
+    border-color: #585b70;
+}
+
+.warning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.warning-title {
+    font-weight: 700;
+    color: #f5f5f7;
+}
+
+.warning-distance {
+    color: #fab387;
+    font-weight: 600;
+}
+
+.warning-site {
+    margin-bottom: 0.5rem;
+    color: #cdd6f4;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.warning-site-type {
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.5rem;
+
+    border-radius: 999px;
+    background: #313244;
+    font-size: 0.75rem;
+}
+
+.warning-event {
+    color: #f5f5f7;
+    margin-bottom: 0.5rem;
+}
+
+.warning-alert {
+    color: #a6adc8;
+    font-size: 0.9rem;
+}
+
+/* Map */
 
 .map-container {
     height: auto;

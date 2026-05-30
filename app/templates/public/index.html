@@ -135,11 +135,57 @@
         </div>
 
         <div id="warnings-tab" class="tab-content">
-            <div class="state-section">
-                <div class="no-alerts">
-                    Warnings
+            {% if warnings %}
+            {% for warning in warnings %}
+            <div class="warning-card">
+                <div class="warning-header">
+                    <div class="warning-title">
+                        {% if warning.warning_type == "INSIDE_ALERT_POLYGON" %}
+                        ⚠ Inside Alert Area
+                        {% else %}
+                        ⚠ Near Alert Area
+                        {% endif %}
+                    </div>
+
+                    <div class="warning-distance">
+                        {% if warning.distance_km == 0%}
+                            Inside Affected Area
+                        {% else %}
+                            {{ warning.distance_km }} kilometers away
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="warning-site">
+                    {{ warning.site_name }}
+
+                    <span class="warning-site-type">
+                        {% if warning.site_type == "PROJECT" %}
+                            Project Site
+                        {% elif warning.site_type == "GND" %}
+                            GND Site
+                        {% else %}
+                            Site
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="warning-event">
+                    {{ warning.event }}
+                </div>
+
+                <div class="warning-alert">
+                    Affecting Alert:
+                    {{ warning.alert_id }}
                 </div>
             </div>
+            {% endfor %}
+            
+            {% else %}
+            <div class="no-alerts">
+                No active warnings
+            </div>
+            {% endif %}
         </div>
     </div>
 

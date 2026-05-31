@@ -24,6 +24,7 @@ def create_app():
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp)
 
-    start_scheduler()
+    if not app.debug or os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+        start_scheduler()
 
     return app

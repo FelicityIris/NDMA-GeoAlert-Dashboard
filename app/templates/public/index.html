@@ -4,7 +4,10 @@
 
 {% block content %}
 <div class="dashboard">
-    <div class="sidebar">
+    <button id="sidebar-toggle" class="sidebar-toggle">
+        ☰
+    </button>
+    <div id="sidebar" class="sidebar">
         <div class="sidebar-tabs">
             <button class="sidebar-tab active" data-tab="alerts">
                 Alerts
@@ -216,5 +219,27 @@
             }
         );
     });
+
+    const sidebar = document.getElementById("sidebar");
+    const toggle_button = document.getElementById("sidebar-toggle");
+
+    function is_mobile() {
+        return window.innerWidth <= 768;
+    }
+
+    if (is_mobile()) {
+        sidebar.classList.remove("sidebar-open");
+    }
+
+    toggle_button.addEventListener(
+        "click",
+        () => {
+            if (is_mobile()) {
+                sidebar.classList.toggle("sidebar-open");
+            } else {
+                sidebar.classList.toggle("sidebar-hidden");
+            }
+        }
+    );
 </script>
 {% endblock %}

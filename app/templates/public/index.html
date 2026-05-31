@@ -5,8 +5,13 @@
 {% block content %}
 <div class="dashboard">
     <button id="sidebar-toggle" class="sidebar-toggle">
-        ☰
+        Toggle Sidebar
     </button>
+
+    <button id="reset-map-button" class="reset-map-button">
+        Reset Map
+    </button>
+
     <div id="sidebar" class="sidebar">
         <div class="sidebar-tabs">
             <button class="sidebar-tab active" data-tab="alerts">
@@ -249,7 +254,7 @@
 
             sidebar.addEventListener(
                 "transitionstart",
-                () => { update_map_size(); }
+                update_map_size
             );
 
             sidebar.addEventListener(
@@ -261,5 +266,9 @@
             );
         }
     );
+
+    function reset_map_view() { map.setView([22.5937, 78.9629], 5); }
+    const reset_map_button = document.getElementById("reset-map-button");
+    reset_map_button.addEventListener("click", reset_map_view);
 </script>
 {% endblock %}

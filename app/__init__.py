@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 
+from app.scheduler.scheduler_service import start_scheduler
 from app.services.init_db import initialize_database
 
 
@@ -22,5 +23,7 @@ def create_app():
 
     app.register_blueprint(public_bp)
     app.register_blueprint(admin_bp)
+
+    start_scheduler()
 
     return app

@@ -10,6 +10,7 @@ Selectively filtering NDMA Alerts based on Prioritized States
 ### Python Dependencies
 ```
 annotated-types==0.7.0
+APScheduler==3.11.2
 blinker==1.9.0
 certifi==2026.4.22
 charset-normalizer==3.4.7
@@ -38,6 +39,7 @@ shapely==2.1.2
 six==1.17.0
 typing-inspection==0.4.2
 typing_extensions==4.15.0
+tzlocal==5.3.1
 urllib3==2.7.0
 Werkzeug==3.1.8
 ```
@@ -77,6 +79,10 @@ DB_NAME=<mysql_database_name>
 # Generate using `python ./scripts/generate_password_hash.py`
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD_HASH=<hashed_password>
+
+# Scheduler Config
+# Minimum 5 minutes
+SCHEDULER_INTERVAL_MINUTES=15
 ```
 
 ## Run

@@ -239,6 +239,26 @@
             } else {
                 sidebar.classList.toggle("sidebar-hidden");
             }
+
+            let animation_frame;
+            function update_map_size() {
+                map.invalidateSize({ pan: true });
+
+                animation_frame = requestAnimationFrame(update_map_size);
+            }
+
+            sidebar.addEventListener(
+                "transitionstart",
+                () => { update_map_size(); }
+            );
+
+            sidebar.addEventListener(
+                "transitionend",
+                () => {
+                    cancelAnimationFrame(animation_frame);
+                    map.invalidateSize({ pan: true });
+                }
+            );
         }
     );
 </script>

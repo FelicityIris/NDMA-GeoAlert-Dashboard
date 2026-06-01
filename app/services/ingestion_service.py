@@ -47,9 +47,12 @@ def ingest_alerts():
         except Exception as error:
             print(f"Failed feed: {feed_slug}")
             print(error)
-
-    delete_expired_alerts()
     print("Alert ingestion complete.")
 
+    print("Deleting expired alerts...")
+    delete_expired_alerts()
+    print("Deleted expired alerts.")
+
+    print("Generating new alerts...")
     refresh_warnings()
     print("New alerts generated.")

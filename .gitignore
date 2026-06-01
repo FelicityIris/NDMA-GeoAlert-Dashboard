@@ -1,6 +1,9 @@
 # Environment Variables
 *.env
 
+#
+certs
+
 # Logs
 logs
 *.log

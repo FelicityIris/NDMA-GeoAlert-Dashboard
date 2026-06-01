@@ -67,6 +67,9 @@ Configure `.env`:
 FLASK_APP=run.py
 FLASK_ENV=development
 
+# Cert
+DB_CA_CERT=<path/to/cert>
+
 # Flask Session Key
 # Generate using `python -c "import secrets; print(secrets.token_hex(32))"`
 SECRET_KEY=<generated_session_key>
@@ -74,7 +77,8 @@ SECRET_KEY=<generated_session_key>
 # DB Auth
 DB_USER=<mysql_user_name>
 DB_PASSWORD=<mysql_user_password>
-DB_HOST=localhost
+DB_HOST=<hostname>
+DB_PORT=<port>
 DB_NAME=<mysql_database_name>
 
 # Admin Auth

@@ -28,8 +28,12 @@ def distance_to_polygon_km(point, polygon):
 
 def evaluate_site_against_alert(site, alert):
     point = Point(site["lng"], site["lat"])
+
+    nearest_distance = None
+
     for polygon_string in alert["polygons"]:
         polygon = parse_polygons(polygon_string)
+
         if polygon.contains(point):
             return { 
                 "warning_type": "INSIDE_ALERT_POLYGON", 
@@ -38,13 +42,16 @@ def evaluate_site_against_alert(site, alert):
         
         distance_km = distance_to_polygon_km(point, polygon)
 
-        if distance_km <= WARNING_DISTANCE_KM:
-            return {
-                "warning_type": "NEAR_ALERT_POLYGON",
-                "distance_km": round(distance_km, 2)
-            }
+        if nearest_distance is None or distance_km < nearest_distance:
+            nearest_distance = distance_km
         
-        return None
+    if nearest_distance is not None and nearest_distance <= WARNING_DISTANCE_KM:
+        return {
+            "warning_type": "NEAR_ALERT_POLYGON",
+            "distance_km": round(distance_km, 2)
+        }
+    
+    return None
 
 def generate_warnings():
     warnings = []

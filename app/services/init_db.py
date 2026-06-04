@@ -1,11 +1,16 @@
 import csv
+import os
 from pathlib import Path
 
 from app.services.db import get_connection
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / "database" / "data"
 SCHEMA_PATH = BASE_DIR / "database" / "schema.sql"
+
+DISTRICTS_DATA = BASE_DIR / os.getenv("DISTRICTS_DATA")
+STATES_DATA = BASE_DIR / os.getenv("STATES_DATA")
+PROEJCT_SITES_DATA = BASE_DIR / os.getenv("PROJECT_SITES_DATA")
+GND_SITES_DATA = BASE_DIR / os.getenv("GND_SITES_DATA")
 
 
 def execute_schema():
@@ -35,71 +40,92 @@ def table_is_empty(cursor, table_name):
 
 
 def seed_states(cursor):
-    with open(DATA_DIR / "states.csv", newline="", encoding="utf-8") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            sql = """
-                INSERT IGNORE INTO states (state_name, feed_slug)
-                VALUES (%s, %s)
-            """
-            cursor.execute(sql, (row["state_name"], row["feed_slug"]))
+    try:
+        print(STATES_DATA)
+        with open(STATES_DATA, newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                sql = """
+                    INSERT IGNORE INTO states (state_name, feed_slug)
+                    VALUES (%s, %s)
+                """
+                cursor.execute(sql, (row["state_name"], row["feed_slug"]))
+    except FileNotFoundError:
+        raise SystemExit(
+            "Initial data missing for States. Please add the data and retry execution."
+        )
 
 
 def seed_districts(cursor):
-    with open(DATA_DIR / "districts.csv", newline="", encoding="utf-8") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            sql = """
-                INSERT IGNORE INTO districts (district_code, district_name)
-                VALUES (%s, %s)
-            """
-            cursor.execute(sql, (int(row["district_code"]), row["district_name"]))
+    try:
+        with open(DISTRICTS_DATA, newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                sql = """
+                    INSERT IGNORE INTO districts (district_code, district_name)
+                    VALUES (%s, %s)
+                """
+                cursor.execute(sql, (int(row["district_code"]), row["district_name"]))
+    except FileNotFoundError:
+        raise SystemExit(
+            "Initial data missing for Districts. Please add the data and retry execution."
+        )
 
 
 def seed_gnd_sites(cursor):
-    with open(DATA_DIR / "gnd_sites.csv", newline="", encoding="utf-8") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            sql = """
-                INSERT IGNORE INTO gnd_sites (site_name, project_id, lat, lng)
-                VALUES (%s, %s, %s, %s)
-            """
+    try:
+        with open(GND_SITES_DATA, newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                sql = """
+                    INSERT IGNORE INTO gnd_sites (site_name, project_id, lat, lng)
+                    VALUES (%s, %s, %s, %s)
+                """
 
-            project_id = None
-            if row["project_id"] != "NULL":
-                project_id = int(row["project_id"])
+                project_id = None
+                if row["project_id"] != "NULL":
+                    project_id = int(row["project_id"])
 
-            if (row["lat"] == "NULL") or (row["lng"] == "NULL"):
-                continue
+                if (row["lat"] == "NULL") or (row["lng"] == "NULL"):
+                    continue
 
-            cursor.execute(
-                sql,
-                (
-                    row["site_name"],
-                    project_id,
-                    float(row["lat"]),
-                    float(row["lng"]),
-                ),
-            )
+                cursor.execute(
+                    sql,
+                    (
+                        row["site_name"],
+                        project_id,
+                        float(row["lat"]),
+                        float(row["lng"]),
+                    ),
+                )
+    except FileNotFoundError:
+        raise SystemExit(
+            "Initial data missing for G&D Sites. Please add the data and retry execution."
+        )
 
 
 def seed_project_sites(cursor):
-    with open(DATA_DIR / "project_sites.csv", newline="", encoding="utf-8") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            sql = """
-                INSERT IGNORE INTO project_sites (project_id, project_name, lat, lng)
-                VALUES (%s, %s, %s, %s)
-            """
-            cursor.execute(
-                sql,
-                (
-                    int(row["project_id"]),
-                    row["project_name"],
-                    float(row["lat"]),
-                    float(row["lng"]),
-                ),
-            )
+    try:
+        with open(PROEJCT_SITES_DATA, newline="", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                sql = """
+                    INSERT IGNORE INTO project_sites (project_id, project_name, lat, lng)
+                    VALUES (%s, %s, %s, %s)
+                """
+                cursor.execute(
+                    sql,
+                    (
+                        int(row["project_id"]),
+                        row["project_name"],
+                        float(row["lat"]),
+                        float(row["lng"]),
+                    ),
+                )
+    except FileNotFoundError:
+        raise SystemExit(
+            "Initial data missing for Project Sites. Please add the data and retry execution."
+        )
 
 
 def seed_database():

@@ -81,6 +81,13 @@ DB_HOST=<hostname>
 DB_PORT=<port>
 DB_NAME=<mysql_database_name>
 
+# Data
+# Add corresponding csv files inside project root and put addresses here
+DISTRICTS_DATA=</path/to/csv-file>
+STATES_DATA=</path/to/csv-file>
+PROJECT_SITES_DATA=</path/to/csv-file>
+GND_SITES_DATA=<path/to/csv-file>
+
 # Admin Auth
 # Generate using `python ./scripts/generate_password_hash.py`
 ADMIN_USERNAME=admin

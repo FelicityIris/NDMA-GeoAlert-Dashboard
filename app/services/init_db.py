@@ -14,7 +14,7 @@ GND_SITES_DATA = BASE_DIR / os.getenv("GND_SITES_DATA")
 
 
 def execute_schema():
-    connection = get_connection(database=False)
+    connection = get_connection()
 
     try:
         with connection.cursor() as cursor:

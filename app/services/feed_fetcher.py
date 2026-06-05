@@ -1,3 +1,4 @@
+import time
 from urllib.parse import parse_qs, urlparse
 
 import feedparser
@@ -6,7 +7,8 @@ from app.services.feed_cache_service import get_feed_cache, update_feed_cache
 from app.services.http_client import session
 
 BASE_RSS_URL = "https://sachet.ndma.gov.in/cap_public_website/rss/"
-
+MAX_RETRIES = 3
+RETRY_DELAY_SECONDS= 5
 
 def generate_feed_url(feed_slug):
     return f"{BASE_RSS_URL}rss_{feed_slug}.xml"
@@ -23,19 +25,30 @@ def fetch_rss_feed(feed_slug):
         if cached_feed["last_modified"]:
             headers["If-Modified-Since"] = cached_feed["last_modified"]
 
-    response = session.get(url, headers=headers, timeout=10)
+    for attempt in range(MAX_RETRIES):
+        try:
+            response = session.get(url, headers=headers, timeout=10)
 
-    if response.status_code == 304:
-        print(f"Feed unchanged: {feed_slug}")
-        return None
+            if response.status_code == 304:
+                print(f"Feed unchanged: {feed_slug}")
+                return None
 
-    response.raise_for_status()
+            response.raise_for_status()
 
-    etag = response.headers.get("ETag")
-    last_modified = response.headers.get("Last-Modified")
-    update_feed_cache(feed_slug, etag, last_modified)
+            etag = response.headers.get("ETag")
+            last_modified = response.headers.get("Last-Modified")
+            update_feed_cache(feed_slug, etag, last_modified)
 
-    return response.text
+            return response.text
+        except Exception as error_msg:
+            print(f"Resource fetch failed for feed: {feed_slug}")
+            print(f"Trying again in {RETRY_DELAY_SECONDS} seconds. Attempt: {attempt+1} / {MAX_RETRIES}")
+            print(f"{error_msg}")
+
+            if attempt == MAX_RETRIES -1:
+                raise
+
+            time.sleep(RETRY_DELAY_SECONDS)
 
 
 def extract_alert_links(rss_data):

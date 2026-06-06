@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template
 
 from app.services.alert_service import get_all_alerts, get_polygon_data
 from app.services.site_service import get_gnd_sites, get_project_sites
-from app.services.warning_service import get_warnings
+from app.services.warning_service import get_all_warnings, get_project_warnings
 
 public_bp = Blueprint("public", __name__)
 
@@ -13,7 +13,7 @@ def home():
     polygon_data = get_polygon_data()
     project_sites = get_project_sites()
     gnd_sites = get_gnd_sites()
-    warnings = get_warnings()
+    projects = get_all_warnings()
 
     return render_template(
         "public/index.html",
@@ -21,9 +21,15 @@ def home():
         polygon_data=polygon_data,
         project_sites=project_sites,
         gnd_sites=gnd_sites,
-        warnings=warnings
+        projects=projects,
     )
+
 
 @public_bp.route("/warnings")
 def warnings():
-    return jsonify(get_warnings())
+    return jsonify(get_all_warnings())
+
+@public_bp.route("/warnings/project/<int:project_id>")
+def project_warnings(project_id):
+    warnings = get_project_warnings(project_id)
+    return jsonify(warnings)

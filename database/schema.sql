@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS warnings (
 
     site_type ENUM('PROJECT', 'GND') NOT NULL,
     site_name VARCHAR(255) NOT NULL,
+    project_id INT,
 
     warning_type ENUM(
         'INSIDE_ALERT_POLYGON',
@@ -88,6 +89,9 @@ CREATE TABLE IF NOT EXISTS warnings (
 
     FOREIGN KEY (alert_id)
         REFERENCES alerts(alert_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (project_id)
+        REFERENCES project_sites(project_id)
         ON DELETE CASCADE
 );
 

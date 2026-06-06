@@ -114,6 +114,8 @@ document.querySelectorAll(".alert-card").forEach((card) => {
     });
 });
 
+const project_markers = {};
+
 project_sites.forEach((site) => {
     const marker_color = "#583470";
     const marker_style = `
@@ -146,14 +148,16 @@ project_sites.forEach((site) => {
         ${site.project_id}
         `
     );
+
+    project_markers[site.project_name] = marker;
 });
 
 gnd_sites.forEach((site) => {
     const marker_color = "#347058";
     const marker_style = `
         background-color: ${marker_color};
-        width: 1.5rem;
-        height: 1.5rem;
+        width: 1rem;
+        height: 1rem;
         display: block;
         left: -1.5rem;
         top: -1.5rem;

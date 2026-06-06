@@ -112,16 +112,17 @@ hr {
 
 .sidebar-tabs {
     display: flex;
-    gap: 0.5rem;
     margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: #11111b;
+    border-radius: 16px;
 }
 
 .sidebar-tab {
     flex: 1;
     border: none;
-    padding: 0.9rem;
-    border-radius: 12px;
-    background: #11111b;
+    padding: 0.5rem;
+    background: #181825;
     color: #a6adc8;
     cursor: pointer;
     font-weight: 600;
@@ -137,6 +138,84 @@ hr {
 .sidebar-tab.active {
     background: #89b4fa;
     color: #11111b;
+}
+
+.project-tab {
+    border-radius: 8px 0 0 8px;
+    margin-right: 0;
+}
+
+.project-card {
+    margin-bottom: 1rem;
+    border: 1px solid #313244;
+    border-radius: 18px;
+    background: #1e1e2e;
+    padding: 1rem 1.2rem;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.project-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.project-name {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.project-alert-count {
+    background: #313244;
+    color: #cdd6f4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+.project-alert-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-alert-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    background: #181825;
+    color: #cdd6f4;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.project-alert-item:hover {
+    background: #313244;
+}
+
+.project-locate-button {
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 0.9rem;
+    background: #89b4fa;
+    color: #11111b;
+    cursor: pointer;
+}
+
+.states-tab {
+    border-radius: 0 8px 8px 0;
+    margin-left: 0;
 }
 
 .tab-content {
@@ -359,7 +438,7 @@ hr {
     border: 1px solid #45475a;
 }
 
-.no-alerts {
+.no-data {
     padding: 1rem;
     border: 1px dashed #313244;
     border-radius: 14px;
@@ -397,9 +476,9 @@ hr {
     background: #89b4fa;
 }
 
-/* Warnings */
+/* Project-wise View */
 
-.warning-card {
+.project-card {
     margin-bottom: 1rem;
     padding: 1rem;
     border-radius: 18px;
@@ -410,52 +489,16 @@ hr {
         border-color 0.15s ease;
 }
 
-.warning-card:hover {
+.project-card:hover {
     transform: translateY(-2px);
     border-color: #585b70;
 }
 
-.warning-header {
+.project-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.75rem;
-}
-
-.warning-title {
-    font-weight: 700;
-    color: #f5f5f7;
-}
-
-.warning-distance {
-    color: #fab387;
-    font-weight: 600;
-}
-
-.warning-site {
-    margin-bottom: 0.5rem;
-    color: #cdd6f4;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.warning-site-type {
-    margin-left: 0.5rem;
-    padding: 0.2rem 0.5rem;
-
-    border-radius: 999px;
-    background: #313244;
-    font-size: 0.75rem;
-}
-
-.warning-event {
-    color: #f5f5f7;
-    margin-bottom: 0.5rem;
-}
-
-.warning-alert {
-    color: #a6adc8;
-    font-size: 0.9rem;
 }
 
 /* Map */
@@ -463,19 +506,20 @@ hr {
 .map-container {
     height: auto;
     flex: 1;
-    margin: 1em;
-    margin-left: 0.5em;
-    padding: 1em;
-    border: 1px solid #585b70;
-    border-radius: 8px;
-    box-shadow: 0 0 10px 0 #000;
+    margin: 1rem;
+    margin-left: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #313244;
+    border-radius: 18px;
+    background: #181825;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     overflow: hidden;
 }
 
 .map {
     height: 100%;
     width: 100%;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 /* Admin Login */

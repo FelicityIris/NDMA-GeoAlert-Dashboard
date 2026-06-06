@@ -26,6 +26,7 @@ def distance_to_polygon_km(point, polygon):
     _, _, distance_m = GEOD.inv(point.x, point.y, nearest_point.x, nearest_point.y)
     return distance_m / 1000
 
+
 def evaluate_site_against_alert(site, alert):
     point = Point(site["lng"], site["lat"])
 
@@ -35,23 +36,21 @@ def evaluate_site_against_alert(site, alert):
         polygon = parse_polygons(polygon_string)
 
         if polygon.contains(point):
-            return { 
-                "warning_type": "INSIDE_ALERT_POLYGON", 
-                "distance_km": 0
-            }
-        
+            return {"warning_type": "INSIDE_ALERT_POLYGON", "distance_km": 0}
+
         distance_km = distance_to_polygon_km(point, polygon)
 
         if nearest_distance is None or distance_km < nearest_distance:
             nearest_distance = distance_km
-        
+
     if nearest_distance is not None and nearest_distance <= WARNING_DISTANCE_KM:
         return {
             "warning_type": "NEAR_ALERT_POLYGON",
-            "distance_km": round(distance_km, 2)
+            "distance_km": round(distance_km, 2),
         }
-    
+
     return None
+
 
 def generate_warnings():
     warnings = []
@@ -60,38 +59,75 @@ def generate_warnings():
     project_sites = get_project_sites()
     gnd_sites = get_gnd_sites()
 
+    project_lookup = {}
+
+    for project in project_sites:
+        project_lookup[project["project_id"]] = project
+
     sites = []
 
     for site in project_sites:
-        sites.append({
-            "site_type": "PROJECT",
-            "site_name": site["project_name"],
-            "lat": site["lat"],
-            "lng": site["lng"]
-        })
+        sites.append(
+            {
+                "site_type": "PROJECT",
+                "site_name": site["project_name"],
+                "project_id": site["project_id"],
+                "lat": site["lat"],
+                "lng": site["lng"],
+            }
+        )
 
     for site in gnd_sites:
-        sites.append({
-            "site_type": "GND",
-            "site_name": site["site_name"],
-            "lat": site["lat"],
-            "lng": site["lng"]
-        })
+        sites.append(
+            {
+                "site_type": "GND",
+                "site_name": site["site_name"],
+                "project_id": site["project_id"],
+                "lat": site["lat"],
+                "lng": site["lng"],
+            }
+        )
+
+    seen = set()
 
     for site in sites:
         for alert in alerts:
             warning = evaluate_site_against_alert(site, alert)
-            if warning:
-                warnings.append({
+
+            if not warning:
+                continue
+
+            if site["site_type"] == "PROJECT":
+                warning_site_name = site["site_name"]
+            else:
+                project = project_lookup.get(site["project_id"])
+
+                if not project:
+                    continue
+
+                warning_site_name = project["project_name"]
+
+            warning_key = (warning_site_name, alert["alert_id"])
+
+            if warning_key in seen:
+                continue
+
+            seen.add(warning_key)
+
+            warnings.append(
+                {
                     "site_type": site["site_type"],
-                    "site_name": site["site_name"],
+                    "site_name": warning_site_name,
+                    "project_id": site["project_id"],
                     "alert_id": alert["alert_id"],
                     "event": alert["event"],
                     "severity": alert["severity"],
-                    **warning
-                })
+                    **warning,
+                }
+            )
 
     return warnings
+
 
 def refresh_warnings():
     warnings = generate_warnings()
@@ -106,36 +142,111 @@ def refresh_warnings():
                             alert_id,
                             site_type,
                             site_name,
+                            project_id,
                             warning_type,
                             distance_km
                         )
-                        VALUES (%s, %s, %s, %s, %s)
+                        VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     (
                         warning["alert_id"],
                         warning["site_type"],
                         warning["site_name"],
+                        warning["project_id"],
                         warning["warning_type"],
-                        warning["distance_km"]
-                    )
+                        warning["distance_km"],
+                    ),
                 )
         connection.commit()
     finally:
         connection.close()
 
-def get_warnings():
+
+def get_all_warnings():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                    SELECT
+                        warnings.alert_id,
+                        warnings.site_name,
+                        warnings.project_id,
+                        warnings.warning_type,
+                        warnings.distance_km,
+
+                        alerts.event,
+                        alerts.severity,
+                        alerts.expires
+                    FROM warnings
+                    JOIN alerts
+                        ON warnings.alert_id = alerts.alert_id
+                    ORDER BY
+                        warnings.distance_km
+                """)
+            warnings = cursor.fetchall()
+
+        projects = {}
+
+        for warning in warnings:
+            project_id = warning["project_id"]
+            project_name = warning["site_name"]
+
+            if project_name not in projects:
+                projects[project_name] = {
+                    "project_id": project_id,
+                    "project_name": project_name,
+                    "alerts": [],
+                }
+
+            projects[project_name]["alerts"].append(
+                {
+                    "alert_id": warning["alert_id"],
+                    "event": warning["event"],
+                    "severity": warning["severity"],
+                    "expires": warning["expires"],
+                    "warning_type": warning["warning_type"],
+                    "distance_km": warning["distance_km"],
+                }
+            )
+
+        return sorted(
+            projects.values(), key=lambda project: len(project["alerts"]), reverse=True
+        )
+    finally:
+        connection.close()
+
+
+def get_project_warnings(project_id):
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
             cursor.execute(
                 """
-                    SELECT *
-                    FROM warnings
-                    ORDER BY
-                        warning_type,
-                        distance_km
-                """
+                SELECT
+                    warnings.alert_id,
+                    warnings.project_id,
+                    warnings.site_name,
+                    warnings.warning_type,
+                    warnings.distance_km,
+
+                    alerts.event,
+                    alerts.severity,
+                    alerts.expires
+
+                FROM warnings
+
+                JOIN alerts
+                    ON warnings.alert_id = alerts.alert_id
+
+                WHERE
+                    warnings.project_id = %s
+
+                ORDER BY
+                    warnings.distance_km
+                """,
+                project_id
             )
+
             return cursor.fetchall()
     finally:
         connection.close()

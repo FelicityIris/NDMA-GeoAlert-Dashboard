@@ -181,7 +181,6 @@ def get_polygon_data():
             for alert in polygon_alerts:
                 if alert["polygons"]:
                     alert["polygons"] = json.loads(alert["polygons"])
-                    alert["severity"] = alert["severity"]
                 else:
                     alert["polygons"] = []
             return polygon_alerts

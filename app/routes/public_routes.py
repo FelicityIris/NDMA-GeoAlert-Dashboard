@@ -38,4 +38,6 @@ def warnings():
 @public_bp.route("/warnings/project/<int:project_id>")
 def project_warnings(project_id):
     warnings = get_project_warnings(project_id)
+    if not warnings["project_exists"]:
+        return jsonify(warnings), 404
     return jsonify(warnings)

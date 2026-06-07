@@ -227,6 +227,24 @@ def get_project_warnings(project_id):
             cursor.execute(
                 """
                 SELECT
+                    project_id,
+                    project_name
+                FROM project_sites
+                WHERE project_id = %s
+                """,
+                (project_id,)
+            )
+            project = cursor.fetchone()
+
+            if not project:
+                return {
+                    "project_exists": False,
+                    "message": "No associated project site in database."
+                }
+
+            cursor.execute(
+                """
+                SELECT
                     warnings.alert_id,
                     warnings.project_id,
                     warnings.site_name,
@@ -248,10 +266,24 @@ def get_project_warnings(project_id):
                 ORDER BY
                     warnings.distance_km
                 """,
-                project_id,
+                (project_id,)
             )
 
-            return cursor.fetchall()
+            warnings = cursor.fetchall()
+
+            if not warnings:
+                return {
+                    "project_exists": True,
+                    "project": project,
+                    "message": "No active alerts affecting this project site."
+                }
+            
+            return {
+                "project_exists": True,
+                "project": project,
+                "warning_count": len(warnings),
+                "warnings": warnings
+            }
     finally:
         connection.close()
 

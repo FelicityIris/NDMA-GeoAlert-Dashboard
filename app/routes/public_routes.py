@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template
 
-from app.services.alert_service import get_all_alerts, get_polygon_data
+from app.services.alert_service import get_alert_by_id, get_all_alerts, get_polygon_data
 from app.services.site_service import get_gnd_sites, get_project_sites
 from app.services.warning_service import get_all_warnings, get_project_warnings
 
@@ -21,9 +21,15 @@ def home():
         polygon_data=polygon_data,
         project_sites=project_sites,
         gnd_sites=gnd_sites,
-        projects=projects,
+        projects=projects
     )
 
+@public_bp.route("/alert/<int:alert_id>")
+def alert_by_id(alert_id):
+    alert = get_alert_by_id(alert_id)
+    if not alert:
+        return jsonify({"error": "Alert not found"}), 404
+    return jsonify(alert)
 
 @public_bp.route("/warnings")
 def warnings():

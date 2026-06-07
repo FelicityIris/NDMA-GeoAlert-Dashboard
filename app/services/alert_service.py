@@ -207,6 +207,22 @@ def get_active_alerts():
     finally:
         connection.close()
 
+def get_alert_by_id(alert_id):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT *
+                FROM alerts
+                WHERE alert_id = %s
+                """,
+                alert_id
+            )
+            return cursor.fetchone()
+    finally:
+        connection.close()
+
 def delete_expired_alerts():
     connection = get_connection()
     try:

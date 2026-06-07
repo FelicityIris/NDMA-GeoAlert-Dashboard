@@ -158,6 +158,9 @@ def refresh_warnings():
                     ),
                 )
         connection.commit()
+    except Exception as error_msg:
+        print(f"Error: Failed to regenerate warnings")
+        print(error_msg)
     finally:
         connection.close()
 

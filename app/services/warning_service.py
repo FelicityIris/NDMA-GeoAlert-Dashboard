@@ -1,5 +1,8 @@
+from collections import defaultdict
+
 from pyproj import Geod
 from shapely.geometry import Point, Polygon
+from shapely.ops import nearest_points
 
 from app.services.alert_service import get_active_alerts
 from app.services.db import get_connection
@@ -22,8 +25,8 @@ def parse_polygons(polygon_string):
 
 
 def distance_to_polygon_km(point, polygon):
-    nearest_point = polygon.boundary.interpolate(polygon.boundary.project(point))
-    _, _, distance_m = GEOD.inv(point.x, point.y, nearest_point.x, nearest_point.y)
+    nearest_geom, _ = nearest_points(polygon.boundary, point)
+    _, _, distance_m = GEOD.inv(point.x, point.y, nearest_geom.x, nearest_geom.y)
     return distance_m / 1000
 
 
@@ -88,7 +91,7 @@ def generate_warnings():
             }
         )
 
-    seen = set()
+    best_warnings = {}
 
     for site in sites:
         for alert in alerts:
@@ -109,24 +112,21 @@ def generate_warnings():
 
             warning_key = (warning_site_name, alert["alert_id"])
 
-            if warning_key in seen:
-                continue
+            candidate = {
+                "site_type": site["site_type"],
+                "site_name": warning_site_name,
+                "project_id": site["project_id"],
+                "alert_id": alert["alert_id"],
+                "event": alert["event"],
+                "severity": alert["severity"],
+                **warning,
+            }
 
-            seen.add(warning_key)
+            existing = best_warnings.get(warning_key)
+            if existing is None or candidate["distance_km"] < existing["distance_km"]:
+                best_warnings[warning_key] = candidate
 
-            warnings.append(
-                {
-                    "site_type": site["site_type"],
-                    "site_name": warning_site_name,
-                    "project_id": site["project_id"],
-                    "alert_id": alert["alert_id"],
-                    "event": alert["event"],
-                    "severity": alert["severity"],
-                    **warning,
-                }
-            )
-
-    return warnings
+    return list(best_warnings.values())
 
 
 def refresh_warnings():

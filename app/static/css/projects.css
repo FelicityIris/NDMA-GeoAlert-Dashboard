@@ -1,0 +1,75 @@
+.project-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 18px;
+    border: 1px solid #313244;
+    background: #1e1e2e;
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-2px);
+    border-color: #585b70;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.project-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.project-name {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.project-alert-count {
+    background: #313244;
+    color: #cdd6f4;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+}
+
+.project-alert-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.project-alert-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    background: #181825;
+    color: #cdd6f4;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.project-alert-item:hover {
+    background: #313244;
+}
+
+.project-locate-button {
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 0.9rem;
+    background: #89b4fa;
+    color: #11111b;
+    cursor: pointer;
+}

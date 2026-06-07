@@ -23,6 +23,7 @@
                     <div
                         class="project-card"
                         data-project-name="{{ project.project_name }}"
+                        data-project-id="{{ project.project_id }}"
                     >
                         <div class="project-header">
                             <div class="project-header-left">
@@ -232,4 +233,6 @@
     </script>
 
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/projects.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tabs.js') }}"></script>
 {% endblock %}

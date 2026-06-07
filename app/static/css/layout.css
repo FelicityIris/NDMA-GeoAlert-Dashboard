@@ -1,0 +1,44 @@
+.dashboard {
+    display: flex;
+    height: 95%;
+    width: 100%;
+    background-color: #1e1e2e;
+}
+
+.sidebar {
+    width: 40%;
+    overflow-y: auto;
+    margin: 1rem;
+    margin-right: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #313244;
+    border-radius: 18px;
+    background: #181825;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    transition:
+        width 0.3s ease,
+        margin 0.3s ease,
+        padding 0.3s ease,
+        transform 0.3s ease;
+}
+
+.sidebar-hidden {
+    width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    overflow: hidden;
+}
+
+.map-container {
+    height: auto;
+    flex: 1;
+    margin: 1rem;
+    margin-left: 0.5rem;
+    padding: 1rem;
+    border: 1px solid #313244;
+    border-radius: 18px;
+    background: #181825;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}

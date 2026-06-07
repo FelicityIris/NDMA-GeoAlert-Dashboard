@@ -1,0 +1,212 @@
+
+.admin-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.admin-header {
+    margin-bottom: 2rem;
+}
+
+.admin-header h1 {
+    margin: 0;
+    color: #f5f5f7;
+    font-size: 2rem;
+}
+
+.admin-header p {
+    margin-top: 0.5rem;
+    color: #7f849c;
+}
+
+.admin-card {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    background: #181825;
+    border: 1px solid #313244;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.admin-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.admin-card-header h2 {
+    margin: 0;
+    color: #f5f5f7;
+}
+
+.admin-card-header p {
+    margin-top: 0.35rem;
+    color: #7f849c;
+    font-size: 0.92rem;
+}
+
+.expand-button,
+.primary-button,
+.sync-button {
+    border: none;
+    border-radius: 14px;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.expand-button:hover,
+.primary-button:hover,
+.sync-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}
+
+.expand-button {
+    background: #313244;
+    color: #cdd6f4;
+}
+
+.primary-button {
+    background: #89b4fa;
+    color: #11111b;
+}
+
+.sync-button {
+    background: #a6e3a1;
+    color: #11111b;
+}
+
+.selected-state-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.selected-state-tag {
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    background: #313244;
+    color: #cdd6f4;
+    font-size: 0.85rem;
+}
+
+.state-editor {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease,
+        margin-top 0.2s ease;
+}
+
+.state-editor.expanded {
+    max-height: 80vh;
+    overflow-y: auto;
+    opacity: 1;
+    margin-top: 1.5rem;
+}
+
+.state-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.secondary-button {
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    border: 1px solid #313244;
+    background: #181825;
+    color: #cdd6f4;
+    cursor: pointer;
+}
+
+.secondary-button:hover {
+    background: #313244;
+}
+
+.state-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.state-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem;
+    border-radius: 14px;
+    background: #1e1e2e;
+    border: 1px solid #313244;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+.state-item:hover {
+    border-color: #585b70;
+    background: #24273a;
+}
+
+.state-item span {
+    color: #cdd6f4;
+}
+
+.state-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.sticky-save-container {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    padding-top: 1rem;
+    background: linear-gradient(to top, #181825 70%, transparent);
+}
+
+.sync-link {
+    text-decoration: none;
+}
+
+.admin-header-actions {
+    margin-top: 1rem;
+}
+
+.logout-link {
+    text-decoration: none;
+}
+
+.logout-button {
+    border: none;
+    border-radius: 14px;
+    padding: 0.75rem 1.1rem;
+    background: #f38ba8;
+    color: #11111b;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.logout-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+}

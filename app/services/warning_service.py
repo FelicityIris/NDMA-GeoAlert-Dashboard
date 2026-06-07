@@ -250,3 +250,28 @@ def get_project_warnings(project_id):
             return cursor.fetchall()
     finally:
         connection.close()
+
+
+def get_projects_by_alerts():
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT
+                    alert_id,
+                    project_id,
+                    site_name
+                FROM warnings
+                ORDER BY site_name
+                """)
+            rows = cursor.fetchall()
+
+        projects_by_alert = defaultdict(list)
+        for row in rows:
+            projects_by_alert[row["alert_id"]].append(
+                {"project_id": row["project_id"], "project_name": row["site_name"]}
+            )
+
+        return projects_by_alert
+    finally:
+        connection.close()

@@ -112,6 +112,10 @@ def get_all_alerts():
                 """)
             states = cursor.fetchall()
 
+            # Circular import temporary fix
+            from app.services.warning_service import get_projects_by_alerts
+            projects_by_alert = get_projects_by_alerts()
+
             state_dashboard = []
             for state in states:
                 cursor.execute(
@@ -151,6 +155,8 @@ def get_all_alerts():
                     alert["district_names"] = [
                         district["district_name"] for district in districts
                     ]
+
+                    alert["affected_projects"] = (projects_by_alert.get(alert["alert_id"], []))
 
                 state_dashboard.append(
                     {"state_name": state["state_name"], "alerts": alerts}

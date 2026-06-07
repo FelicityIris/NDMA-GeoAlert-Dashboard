@@ -178,6 +178,20 @@
                                                     </div>
                                                 </div>
                                             {% endif %}
+
+                                            {% if alert.affected_projects %}
+                                                <div class="detail-section">
+                                                    <div class="detail-section-title">Affected Projects</div>
+
+                                                    <div class="project-tags">
+                                                        {% for project in alert.affected_projects %}
+                                                            <button class="project-tag" data-project-id="{{ project.project_id }}">
+                                                                {{ project.project_name }}
+                                                            </button>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </details>
                                 {% endfor %}

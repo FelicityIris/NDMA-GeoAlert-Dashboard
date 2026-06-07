@@ -6,14 +6,6 @@
 
 {% block content %}
     <div class="dashboard">
-        <button id="sidebar-toggle" class="sidebar-toggle">
-            Toggle Sidebar
-        </button>
-
-        <button id="reset-map-button" class="reset-map-button">
-            Reset Map
-        </button>
-
         <div id="sidebar" class="sidebar">
             <div class="sidebar-tabs">
                 <button class="sidebar-tab project-tab active" data-tab="projects">
@@ -223,6 +215,15 @@
         </div>
     </div>
 
+    <div class="map-controls">
+        <button id="reset-map-button" class="reset-map-button">
+            Reset Map
+        </button>
+        
+        <button id="sidebar-toggle" class="sidebar-toggle">
+            Toggle Sidebar
+        </button>
+    </div>
 
     <script>
         const polygon_data = {{ polygon_data | tojson }};

@@ -9,7 +9,7 @@ SCHEMA_PATH = BASE_DIR / "database" / "schema.sql"
 
 DISTRICTS_DATA = BASE_DIR / os.getenv("DISTRICTS_DATA")
 STATES_DATA = BASE_DIR / os.getenv("STATES_DATA")
-PROEJCT_SITES_DATA = BASE_DIR / os.getenv("PROJECT_SITES_DATA")
+PROJECT_SITES_DATA = BASE_DIR / os.getenv("PROJECT_SITES_DATA")
 GND_SITES_DATA = BASE_DIR / os.getenv("GND_SITES_DATA")
 
 
@@ -106,7 +106,7 @@ def seed_gnd_sites(cursor):
 
 def seed_project_sites(cursor):
     try:
-        with open(PROEJCT_SITES_DATA, newline="", encoding="utf-8") as file:
+        with open(PROJECT_SITES_DATA, newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 sql = """

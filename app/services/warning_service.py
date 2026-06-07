@@ -46,7 +46,7 @@ def evaluate_site_against_alert(site, alert):
     if nearest_distance is not None and nearest_distance <= WARNING_DISTANCE_KM:
         return {
             "warning_type": "NEAR_ALERT_POLYGON",
-            "distance_km": round(distance_km, 2),
+            "distance_km": round(nearest_distance, 2),
         }
 
     return None

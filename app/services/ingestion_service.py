@@ -23,7 +23,7 @@ def ingest_alerts():
         try:
             alert_links = get_alert_links(feed_slug)
 
-            if alert_links is None:
+            if not alert_links:
                 continue
 
             for link in alert_links:

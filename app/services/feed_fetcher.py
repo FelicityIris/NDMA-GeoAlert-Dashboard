@@ -65,7 +65,7 @@ def get_alert_links(feed_slug):
     rss_data = fetch_rss_feed(feed_slug)
 
     if not rss_data:
-        return None
+        return []
 
     return extract_alert_links(rss_data)
 

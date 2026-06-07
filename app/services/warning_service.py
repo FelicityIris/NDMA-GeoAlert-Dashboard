@@ -157,6 +157,7 @@ def refresh_warnings():
                         warning["distance_km"],
                     ),
                 )
+        print("Warnings regenerated and stored in DB")
         connection.commit()
     except Exception as error_msg:
         print(f"Error: Failed to regenerate warnings")
@@ -247,7 +248,7 @@ def get_project_warnings(project_id):
                 ORDER BY
                     warnings.distance_km
                 """,
-                project_id
+                project_id,
             )
 
             return cursor.fetchall()

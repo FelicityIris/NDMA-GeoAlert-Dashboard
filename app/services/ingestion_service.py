@@ -30,36 +30,27 @@ def ingest_alerts():
                 try:
                     identifier = extract_identifer_from_link(link)
                     if alert_exists(identifier):
-                        print(f"Skipping existing alert: {identifier}")
-                        print(f"Delayed for { REQUEST_DELAY_SECONDS } seconds.")
-                        time.sleep(REQUEST_DELAY_SECONDS)
+                        print(f"XML already in DB, skipping [ID: {identifier}]")
                         continue
                     alert_data = fetch_and_parse_alert(link)
                     if is_alert_expired(alert_data):
-                        print(f"Skipping expired alert: {alert_data['identifier']}")
-                        print(f"Delayed for { REQUEST_DELAY_SECONDS } seconds.")
-                        time.sleep(REQUEST_DELAY_SECONDS)
+                        print(f"XML expired, skipping [ID: {alert_data['identifier']}]")
                         continue
                     save_alert(alert_data, state_id)
-                    print(f"Saved alert: {alert_data['identifier']}")
-                    print(f"Delayed for { REQUEST_DELAY_SECONDS } seconds.")
-                    time.sleep(REQUEST_DELAY_SECONDS)
+                    print(f"Saved XML in DB [ID: {alert_data['identifier']}]")
                 except Exception as error:
-                    print(f"Failed alert: {link}")
+                    print(f"Error: Failed to fetch XML [Link: {link}]")
                     print(error)
-                    print(f"Delayed for { REQUEST_DELAY_SECONDS } seconds.")
+                finally:
+                    print(f"Fetching next XML in { REQUEST_DELAY_SECONDS } seconds.")
                     time.sleep(REQUEST_DELAY_SECONDS)
-        except Exception as error:
-            print(f"Failed feed: {feed_slug}")
-            print(error)
-            print(f"Delayed for { REQUEST_DELAY_SECONDS } seconds.")
-            time.sleep(REQUEST_DELAY_SECONDS)
-    print("Alert ingestion complete.")
+        except Exception as error_msg:
+            print(f"Error: Failed to fetch RSS Feed [State Feed Slug: {feed_slug}]")
+            print(error_msg)
+    print("Data ingestion complete")
 
-    print("Deleting expired alerts...")
+    print("Deleting expired XMLs")
     delete_expired_alerts()
-    print("Deleted expired alerts.")
 
-    print("Generating new alerts...")
+    print("Generating new warnings")
     refresh_warnings()
-    print("New alerts generated.")

@@ -237,6 +237,7 @@ def delete_expired_alerts():
                 WHERE expires IS NOT NULL
                 AND expires < NOW()
                 """)
+        print("Expired XMLs successfully deleted")
         connection.commit()
     except Exception as error_msg:
         print(f"Error: Failed to delete expired XMLs")

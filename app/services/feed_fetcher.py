@@ -30,7 +30,7 @@ def fetch_rss_feed(feed_slug):
             response = session.get(url, headers=headers, timeout=10)
 
             if response.status_code == 304:
-                print(f"Feed unchanged: {feed_slug}")
+                print(f"RSS Feed Unchanged, skipping [State Feed Slug: {feed_slug}]")
                 return None
 
             response.raise_for_status()
@@ -41,7 +41,7 @@ def fetch_rss_feed(feed_slug):
 
             return response.text
         except Exception as error_msg:
-            print(f"Resource fetch failed for feed: {feed_slug}")
+            print(f"Error: Failed to fetch RSS Feed [State Feed Slug: {feed_slug}]")
             print(f"Trying again in {RETRY_DELAY_SECONDS} seconds. Attempt: {attempt+1} / {MAX_RETRIES}")
             print(f"{error_msg}")
 

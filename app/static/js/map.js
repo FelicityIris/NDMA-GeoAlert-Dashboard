@@ -185,3 +185,44 @@ gnd_sites.forEach((site) => {
             `
     );
 });
+
+const sidebar = document.getElementById("sidebar");
+const toggle_button = document.getElementById("sidebar-toggle");
+
+function is_mobile() {
+    return window.innerWidth <= 768;
+}
+
+if (is_mobile()) {
+    sidebar.classList.remove("sidebar-open");
+}
+
+let animation_frame;
+function update_map_size() {
+    map.invalidateSize({ pan: true });
+
+    animation_frame = requestAnimationFrame(update_map_size);
+}
+
+toggle_button.addEventListener("click", () => {
+    if (is_mobile()) {
+        sidebar.classList.toggle("sidebar-open");
+    } else {
+        sidebar.classList.toggle("sidebar-hidden");
+    }
+
+    reset_map_button.classList.toggle("map-controls-hidden");
+});
+
+sidebar.addEventListener("transitionstart", update_map_size);
+
+sidebar.addEventListener("transitionend", () => {
+    cancelAnimationFrame(animation_frame);
+    map.invalidateSize({ pan: true });
+});
+
+function reset_map_view() {
+    map.setView([22.5937, 78.9629], 5);
+}
+const reset_map_button = document.getElementById("reset-map-button");
+reset_map_button.addEventListener("click", reset_map_view);

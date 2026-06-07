@@ -215,106 +215,20 @@
         </div>
     </div>
 
+    <div id="alert-modal" class="modal">
+        <div class="modal-content">
+            <button id="close-modal" class="close-modal">✕</button>
+
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+
     <script>
         const polygon_data = {{ polygon_data | tojson }};
         const project_sites =  {{ project_sites | tojson }};
         const gnd_sites = {{ gnd_sites | tojson }};
     </script>
 
-    <script>
-        document.querySelectorAll(".sidebar-tab").forEach((button) => {
-            button.addEventListener(
-                "click",
-                () => {
-                    document.querySelectorAll(".sidebar-tab").forEach((tab) => {
-                        tab.classList.remove("active");
-                    });
-                    document.querySelectorAll(".tab-content").forEach((content) => {
-                        content.classList.remove("active");
-                    });
-                    button.classList.add("active");
-                    document.getElementById(`${button.dataset.tab}-tab`).classList.add("active");
-                }
-            );
-        });
-
-        const sidebar = document.getElementById("sidebar");
-        const toggle_button = document.getElementById("sidebar-toggle");
-
-        function is_mobile() {
-            return window.innerWidth <= 768;
-        }
-
-        if (is_mobile()) {
-            sidebar.classList.remove("sidebar-open");
-        }
-
-        toggle_button.addEventListener(
-            "click",
-            () => {
-                if (is_mobile()) {
-                    sidebar.classList.toggle("sidebar-open");
-                } else {
-                    sidebar.classList.toggle("sidebar-hidden");
-                }
-
-                let animation_frame;
-                function update_map_size() {
-                    map.invalidateSize({ pan: true });
-
-                    animation_frame = requestAnimationFrame(update_map_size);
-                }
-
-                sidebar.addEventListener(
-                    "transitionstart",
-                    update_map_size
-                );
-
-                sidebar.addEventListener(
-                    "transitionend",
-                    () => {
-                        cancelAnimationFrame(animation_frame);
-                        map.invalidateSize({ pan: true });
-                    }
-                );
-            }
-        );
-
-        function reset_map_view() { map.setView([22.5937, 78.9629], 5); }
-        const reset_map_button = document.getElementById("reset-map-button");
-        reset_map_button.addEventListener("click", reset_map_view);
-
-        document.querySelectorAll(".project-alert-item").forEach((item) => {
-            item.addEventListener(
-                "click",
-                () => {
-                    const alert_id = item.dataset.alertId;
-                    openAlertModal(alert_id);
-                }
-            );
-        });
-
-        document.querySelectorAll(".project-locate-button").forEach((button) => {
-            button.addEventListener(
-                "click",
-                () => {
-                    const project_name = button.dataset.projectName;
-                    const marker = project_markers[project_name];
-
-                    if (!marker) { return; }
-
-                    map.flyTo(
-                        marker.getLatLng(),
-                        10,
-                        {
-                            animate: true,
-                            duration: 1
-                        }
-                    );
-
-                    marker.openPopup();
-                }
-            );
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
 {% endblock %}

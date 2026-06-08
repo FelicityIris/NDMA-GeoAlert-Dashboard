@@ -66,12 +66,27 @@
 }
 
 .project-locate-button {
+    width: 42px;
+    height: 42px;
     border: none;
-    border-radius: 12px;
-    padding: 0.6rem 0.9rem;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--accent);
     color: var(--on-accent);
     cursor: pointer;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.project-locate-button:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
 }
 
 .project-locate-button svg {

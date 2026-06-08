@@ -7,14 +7,15 @@
 @import url("modal.css");
 @import url("projects.css");
 @import url("responsive.css");
+@import url("search.css");
 @import url("tabs.css");
 
 @font-face {
     font-family: "Inter";
 
     src:
-        url("/static/fonts/inter-variable.woff2")
-        format("woff2");
+        url("/static/fonts/Inter-Variable.ttf")
+        format("truetype");
 
     font-weight: 100 900;
     font-style: normal;

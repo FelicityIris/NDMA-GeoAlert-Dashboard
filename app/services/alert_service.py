@@ -114,6 +114,7 @@ def get_all_alerts():
 
             # Circular import temporary fix
             from app.services.warning_service import get_projects_by_alerts
+
             projects_by_alert = get_projects_by_alerts()
 
             state_dashboard = []
@@ -156,11 +157,16 @@ def get_all_alerts():
                         district["district_name"] for district in districts
                     ]
 
-                    alert["affected_projects"] = (projects_by_alert.get(alert["alert_id"], []))
+                    alert["affected_projects"] = projects_by_alert.get(
+                        alert["alert_id"], []
+                    )
 
                 state_dashboard.append(
                     {"state_name": state["state_name"], "alerts": alerts}
                 )
+            state_dashboard.sort(
+                key=lambda state: (len(state["alerts"]) == 0, state["state_name"])
+            )
             return state_dashboard
     finally:
         connection.close()
@@ -187,12 +193,12 @@ def get_polygon_data():
     finally:
         connection.close()
 
+
 def get_active_alerts():
     connection = get_connection()
     try:
         with connection.cursor() as cursor:
-            cursor.execute(
-                """
+            cursor.execute("""
                     SELECT
                         alert_id,
                         event,
@@ -200,8 +206,7 @@ def get_active_alerts():
                         expires,
                         polygons
                     FROM alerts
-                """
-            )
+                """)
             alerts = cursor.fetchall()
             for alert in alerts:
                 if alert["polygons"]:
@@ -211,6 +216,7 @@ def get_active_alerts():
             return alerts
     finally:
         connection.close()
+
 
 def get_alert_by_id(alert_id):
     connection = get_connection()
@@ -222,11 +228,12 @@ def get_alert_by_id(alert_id):
                 FROM alerts
                 WHERE alert_id = %s
                 """,
-                alert_id
+                alert_id,
             )
             return cursor.fetchone()
     finally:
         connection.close()
+
 
 def delete_expired_alerts():
     connection = get_connection()

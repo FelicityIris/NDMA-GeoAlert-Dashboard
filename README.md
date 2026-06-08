@@ -68,6 +68,7 @@ FLASK_APP=run.py
 FLASK_ENV=development
 
 # Cert
+# If needed otherwise leave blank
 DB_CA_CERT=<path/to/cert>
 
 # Flask Session Key
@@ -97,8 +98,35 @@ ADMIN_PASSWORD_HASH=<hashed_password>
 # Minimum 5 minutes
 SCHEDULER_INTERVAL_MINUTES=15
 ```
+**\* Add necessary csv files containing districts, states, projects and g&d sites data within the project dierctory.**
 
 ## Run
+### Debug
 ```shell
-flask run
+flask --app run.py run --debug
 ```
+### Deploy
+```shell
+mkdir -p logs/
+
+gunicorn run:app \
+  --workers 1 \
+  --worker-class gthread \
+  --threads 4 \
+  --bind 0.0.0.0:5000 \
+  --timeout 120 \
+  --access-logfile logs/access.log \
+  --error-logfile logs/error.log \
+  --log-level info
+```
+
+## References
+- [NDMA Sachet Portal](https://sachet.ndma.gov.in/) - Primary source of all Alert Information by NDMA
+- [Flask](https://palletsprojects.com/projects/flask/) - Backend Technology
+- [MySQL](https://www.mysql.com/) - Database
+- [Shapely](https://github.com/shapely/shapely) & [pyproj](https://github.com/pyproj4/pyproj) - Coordinate based Proximity Analysis to generate per-Project Warnings
+- [Gunicorn](https://gunicorn.org/) - Production deployment
+- [Leaflet](https://leafletjs.com/) - Map display on Home Page
+- [Catppuccin Color Pallete](https://catppuccin.com/) - Color and Design Aesthetics
+- [Lucide Icons](https://lucide.dev/) - UI Icons
+- [Community Created Maps of India](https://projects.datameet.org/maps/) - Official Boundary of India

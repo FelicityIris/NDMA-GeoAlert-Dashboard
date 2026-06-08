@@ -9,14 +9,35 @@
     </head>
 
     <body>
-        <nav class="title-menu">
-            <h2>NDMA GeoAlert Dashboard</h2>
+        <nav class="navbar">
+            <div class="nav-left">
+                <h2><a href="/">NDMA GeoAlert Dashboard</a></h2>
+            </div>
+
+            <div class="nav-right">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+                    <i id="theme-icon" data-lucide="sun"></i>
+                </button>
+
+                <button id="menu-toggle" class="menu-toggle">
+                    <i data-lucide="menu"></i>
+                </button>
+
+                <div id="menu-dropdown" class="menu-dropdown">
+                    <a href="/">Home</a>
+                    <a href="/api/docs">API Documentation</a>
+                    <a href="/admin">Admin Portal</a>
+                    <a href="/about">About</a>
+                </div>
+            </div>
         </nav>
 
         {% block content %}
         {% endblock %}
 
         <script src = "{{ url_for('static', filename = 'vendor/leaflet/leaflet.js') }}"></script>
+        <script src = "{{ url_for('static', filename='vendor/lucide/lucide.min.js') }}"></script>
         <script src = "{{ url_for('static', filename = 'js/map.js') }}"></script>
+        <script src = "{{ url_for('static', filename = 'js/nav.js') }}"></script>
     </body>
 </html>

@@ -2,7 +2,7 @@
     display: flex;
     margin-bottom: 1rem;
     padding: 0.5rem;
-    background: #11111b;
+    background: var(--bg-primary);
     border-radius: 16px;
 }
 
@@ -10,8 +10,8 @@
     flex: 1;
     border: none;
     padding: 0.5rem;
-    background: #181825;
-    color: #a6adc8;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
     cursor: pointer;
     font-weight: 600;
     transition:
@@ -20,12 +20,12 @@
 }
 
 .sidebar-tab:hover {
-    background: #313244;
+    background: var(--border);
 }
 
 .sidebar-tab.active {
-    background: #89b4fa;
-    color: #11111b;
+    background: var(--accent);
+    color: var(--on-accent);
 }
 
 .project-tab {

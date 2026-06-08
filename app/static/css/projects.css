@@ -2,8 +2,8 @@
     margin-bottom: 1rem;
     padding: 1rem;
     border-radius: 18px;
-    border: 1px solid #313244;
-    background: #1e1e2e;
+    border: 1px solid var(--border);
+    background: var(--bg-tertiary);
     transition:
         transform 0.15s ease,
         border-color 0.15s ease;
@@ -11,7 +11,7 @@
 
 .project-card:hover {
     transform: translateY(-2px);
-    border-color: #585b70;
+    border-color: var(--border-hover);
 }
 
 .project-header {
@@ -33,8 +33,8 @@
 }
 
 .project-alert-count {
-    background: #313244;
-    color: #cdd6f4;
+    background: var(--border);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 999px;
     font-size: 0.8rem;
@@ -54,22 +54,27 @@
     width: 100%;
     border: none;
     border-radius: 12px;
-    background: #181825;
-    color: #cdd6f4;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 0.8rem 1rem;
     cursor: pointer;
     text-align: left;
 }
 
 .project-alert-item:hover {
-    background: #313244;
+    background: var(--border);
 }
 
 .project-locate-button {
     border: none;
     border-radius: 12px;
     padding: 0.6rem 0.9rem;
-    background: #89b4fa;
-    color: #11111b;
+    background: var(--accent);
+    color: var(--on-accent);
     cursor: pointer;
+}
+
+.project-locate-button svg {
+    width: 20px;
+    height: 20px;
 }

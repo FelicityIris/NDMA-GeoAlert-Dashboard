@@ -16,8 +16,8 @@
 }
 
 .state-alert-count {
-    background: #313244;
-    color: #cdd6f4;
+    background: var(--border);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 999px;
     font-size: 0.8rem;
@@ -25,9 +25,9 @@
 
 .alert-card {
     margin-bottom: 1rem;
-    border: 1px solid #313244;
+    border: 1px solid var(--border);
     border-radius: 18px;
-    background: #1e1e2e;
+    background: var(--bg-tertiary);
     overflow: hidden;
     transition:
         border-color 0.2s ease,
@@ -36,20 +36,20 @@
 }
 
 .alert-card:hover {
-    border-color: #585b70;
+    border-color: var(--border-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
 .alert-card[open] {
-    border-color: #7f849c;
+    border-color: var(--text-muted);
     transition: transform 1s ease;
 }
 
 .alert-card-active {
-    border-color: #89b4fa !important;
+    border-color: var(--accent) !important;
     box-shadow:
-        0 0 0 2px rgba(137, 180, 250, 0.25),
+        0 0 0 2px var(--accent-glow),
         0 12px 32px rgba(0, 0, 0, 0.35);
     transform: translateY(-2px);
 }
@@ -84,13 +84,13 @@
 
 .alert-event {
     margin: 0;
-    color: #f5f5f7;
+    color: var(--text-primary);
     font-size: 1rem;
     font-weight: 700;
 }
 
 .alert-identifier {
-    color: #6c7086;
+    color: var(--text-muted);
     font-size: 0.8rem;
     font-family: monospace;
 }
@@ -107,14 +107,14 @@
 }
 
 .alert-expiry label {
-    color: #6c7086;
+    color: var(--text-muted);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
 
 .alert-expiry span {
-    color: #f5f5f7;
+    color: var(--text-primary);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -123,7 +123,7 @@
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.3s ease;
-    background: #11111b;
+    background: var(--bg-primary);
     padding: 0 1.2rem;
 }
 
@@ -143,10 +143,10 @@
     margin-top: 1rem;
     padding: 1rem;
     border-radius: 14px;
-    background: #181825;
-    color: #cdd6f4;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     line-height: 1.5;
-    border: 1px solid #313244;
+    border: 1px solid var(--border);
 }
 
 .detail-section {
@@ -155,7 +155,7 @@
 
 .detail-section-title {
     margin-bottom: 0.8rem;
-    color: #6c7086;
+    color: var(--text-muted);
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -171,46 +171,48 @@
 .detail-item {
     padding: 0.85rem;
     border-radius: 14px;
-    background: #181825;
-    border: 1px solid #313244;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
 }
 
 .detail-item label {
-    color: #6c7086;
+    color: var(--text-muted);
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
 
 .detail-item span {
-    color: #f5f5f7;
+    color: var(--text-primary);
     font-size: 0.92rem;
 }
 
-.district-tags, .project-tags {
+.district-tags,
+.project-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.district-tag, .project-tag {
+.district-tag,
+.project-tag {
     padding: 0.45rem 0.8rem;
     border-radius: 999px;
-    background: #313244;
-    color: #cdd6f4;
+    background: var(--border);
+    color: var(--text-primary);
     font-size: 0.82rem;
-    border: 1px solid #45475a;
+    border: 1px solid var(--border-subtle);
 }
 
 .no-data {
     padding: 1rem;
-    border: 1px dashed #313244;
+    border: 1px dashed var(--border);
     border-radius: 14px;
-    background: #11111b;
-    color: #6c7086;
+    background: var(--bg-primary);
+    color: var(--text-muted);
     font-style: italic;
 }
 
@@ -223,22 +225,22 @@
 }
 
 .severity-extreme {
-    background: #181825;
-    border: 1px solid #f38ba8;
+    background: var(--bg-secondary);
+    border: 1px solid var(--color-danger);
 }
 
 .severity-severe {
-    background: #f38ba8;
+    background: var(--color-danger);
 }
 
 .severity-moderate {
-    background: #fab387;
+    background: var(--color-caution);
 }
 
 .severity-minor {
-    background: #f9e2af;
+    background: var(--color-warning);
 }
 
 .severity-unknown {
-    background: #89b4fa;
+    background: var(--accent);
 }

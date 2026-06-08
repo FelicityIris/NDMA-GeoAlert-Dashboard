@@ -1,4 +1,3 @@
-
 .admin-container {
     max-width: 1100px;
     margin: 0 auto;
@@ -11,21 +10,21 @@
 
 .admin-header h1 {
     margin: 0;
-    color: #f5f5f7;
+    color: var(--text-primary);
     font-size: 2rem;
 }
 
 .admin-header p {
     margin-top: 0.5rem;
-    color: #7f849c;
+    color: var(--text-muted);
 }
 
 .admin-card {
     margin-bottom: 1.5rem;
     padding: 1.5rem;
     border-radius: 20px;
-    background: #181825;
-    border: 1px solid #313244;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
@@ -39,12 +38,12 @@
 
 .admin-card-header h2 {
     margin: 0;
-    color: #f5f5f7;
+    color: var(--text-primary);
 }
 
 .admin-card-header p {
     margin-top: 0.35rem;
-    color: #7f849c;
+    color: var(--text-muted);
     font-size: 0.92rem;
 }
 
@@ -70,18 +69,18 @@
 }
 
 .expand-button {
-    background: #313244;
-    color: #cdd6f4;
+    background: var(--border);
+    color: var(--text-primary);
 }
 
 .primary-button {
-    background: #89b4fa;
-    color: #11111b;
+    background: var(--accent);
+    color: var(--on-accent);
 }
 
 .sync-button {
-    background: #a6e3a1;
-    color: #11111b;
+    background: var(--color-success);
+    color: var(--on-semantic);
 }
 
 .selected-state-tags {
@@ -93,9 +92,10 @@
 .selected-state-tag {
     padding: 0.45rem 0.85rem;
     border-radius: 999px;
-    background: #313244;
-    color: #cdd6f4;
+    background: var(--border);
+    color: var(--text-primary);
     font-size: 0.85rem;
+    border: 1px solid var(--border-subtle);
 }
 
 .state-editor {
@@ -125,14 +125,14 @@
 .secondary-button {
     padding: 0.75rem 1rem;
     border-radius: 12px;
-    border: 1px solid #313244;
-    background: #181825;
-    color: #cdd6f4;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     cursor: pointer;
 }
 
 .secondary-button:hover {
-    background: #313244;
+    background: var(--border);
 }
 
 .state-list {
@@ -147,8 +147,8 @@
     gap: 0.75rem;
     padding: 0.9rem;
     border-radius: 14px;
-    background: #1e1e2e;
-    border: 1px solid #313244;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
     cursor: pointer;
     transition:
         border-color 0.15s ease,
@@ -156,12 +156,12 @@
 }
 
 .state-item:hover {
-    border-color: #585b70;
-    background: #24273a;
+    border-color: var(--border-hover);
+    background: var(--surface-hover);
 }
 
 .state-item span {
-    color: #cdd6f4;
+    color: var(--text-primary);
 }
 
 .state-item input[type="checkbox"] {
@@ -177,7 +177,7 @@
     margin-top: 1.5rem;
     margin-bottom: 0;
     padding-top: 1rem;
-    background: linear-gradient(to top, #181825 70%, transparent);
+    background: linear-gradient(to top, var(--bg-secondary) 70%, transparent);
 }
 
 .sync-link {
@@ -196,8 +196,8 @@
     border: none;
     border-radius: 14px;
     padding: 0.75rem 1.1rem;
-    background: #f38ba8;
-    color: #11111b;
+    background: var(--color-danger);
+    color: var(--on-semantic);
     font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;

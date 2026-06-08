@@ -25,7 +25,7 @@ def home():
     )
 
 
-@public_bp.route("/alert/<int:alert_id>")
+@public_bp.route("/api/alert/<int:alert_id>")
 def alert_by_id(alert_id):
     alert = get_alert_by_id(alert_id)
     if not alert:
@@ -33,12 +33,12 @@ def alert_by_id(alert_id):
     return jsonify(alert)
 
 
-@public_bp.route("/warnings")
+@public_bp.route("/api/warnings")
 def warnings():
     return jsonify(get_all_warnings())
 
 
-@public_bp.route("/warnings/project/<int:project_id>")
+@public_bp.route("/api/project/<int:project_id>")
 def project_warnings(project_id):
     warnings = get_project_warnings(project_id)
     if not warnings["project_exists"]:

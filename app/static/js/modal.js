@@ -29,7 +29,7 @@ function renderAlertModal(alert) {
 document.querySelectorAll(".project-alert-item").forEach((button) => {
     button.addEventListener("click", async () => {
         const alert_id = button.dataset.alertId;
-        const response = await fetch(`/alert/${alert_id}`);
+        const response = await fetch(`/api/alert/${alert_id}`);
         const alert = await response.json();
         renderAlertModal(alert);
         document.getElementById("alert-modal").classList.add("open");

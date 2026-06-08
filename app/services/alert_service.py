@@ -228,7 +228,7 @@ def get_alert_by_id(alert_id):
                 FROM alerts
                 WHERE alert_id = %s
                 """,
-                alert_id,
+                (alert_id,)
             )
             return cursor.fetchone()
     finally:

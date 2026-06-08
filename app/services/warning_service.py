@@ -138,15 +138,15 @@ def refresh_warnings():
             for warning in warnings:
                 cursor.execute(
                     """
-                        INSERT INTO warnings (
-                            alert_id,
-                            site_type,
-                            site_name,
-                            project_id,
-                            warning_type,
-                            distance_km
-                        )
-                        VALUES (%s, %s, %s, %s, %s, %s)
+                    INSERT INTO warnings (
+                        alert_id,
+                        site_type,
+                        site_name,
+                        project_id,
+                        warning_type,
+                        distance_km
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     """,
                     (
                         warning["alert_id"],
@@ -171,21 +171,21 @@ def get_all_warnings():
     try:
         with connection.cursor() as cursor:
             cursor.execute("""
-                    SELECT
-                        warnings.alert_id,
-                        warnings.site_name,
-                        warnings.project_id,
-                        warnings.warning_type,
-                        warnings.distance_km,
+                SELECT
+                    warnings.alert_id,
+                    warnings.site_name,
+                    warnings.project_id,
+                    warnings.warning_type,
+                    warnings.distance_km,
 
-                        alerts.event,
-                        alerts.severity,
-                        alerts.expires
-                    FROM warnings
-                    JOIN alerts
-                        ON warnings.alert_id = alerts.alert_id
-                    ORDER BY
-                        warnings.distance_km
+                    alerts.event,
+                    alerts.severity,
+                    alerts.expires
+                FROM warnings
+                JOIN alerts
+                    ON warnings.alert_id = alerts.alert_id
+                ORDER BY
+                    warnings.distance_km
                 """)
             warnings = cursor.fetchall()
 
@@ -232,14 +232,14 @@ def get_project_warnings(project_id):
                 FROM project_sites
                 WHERE project_id = %s
                 """,
-                (project_id,)
+                (project_id,),
             )
             project = cursor.fetchone()
 
             if not project:
                 return {
                     "project_exists": False,
-                    "message": "No associated project site in database."
+                    "message": "No associated project site in database.",
                 }
 
             cursor.execute(
@@ -266,7 +266,7 @@ def get_project_warnings(project_id):
                 ORDER BY
                     warnings.distance_km
                 """,
-                (project_id,)
+                (project_id,),
             )
 
             warnings = cursor.fetchall()
@@ -275,14 +275,14 @@ def get_project_warnings(project_id):
                 return {
                     "project_exists": True,
                     "project": project,
-                    "message": "No active alerts affecting this project site."
+                    "message": "No active alerts affecting this project site.",
                 }
-            
+
             return {
                 "project_exists": True,
                 "project": project,
                 "warning_count": len(warnings),
-                "warnings": warnings
+                "warnings": warnings,
             }
     finally:
         connection.close()
@@ -309,5 +309,40 @@ def get_projects_by_alerts():
             )
 
         return projects_by_alert
+    finally:
+        connection.close()
+
+
+def search_projects(query):
+    connection = get_connection()
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                """
+                SELECT
+                    project_sites.project_id,
+                    project_sites.project_name,
+
+                    EXISTS (
+                        SELECT 1
+                        FROM warnings
+                        WHERE warnings.project_id = project_sites.project_id
+                    ) AS has_warnings
+
+                FROM project_sites
+
+                WHERE
+                    LOWER(project_sites.project_name)
+                    LIKE LOWER(%s)
+
+                ORDER BY
+                    project_sites.project_name
+
+                LIMIT 20
+                """,
+                (f"%{query}%",),
+            )
+
+            return cursor.fetchall()
     finally:
         connection.close()

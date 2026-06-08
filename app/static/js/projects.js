@@ -26,6 +26,6 @@ document.addEventListener("click", (event) => {
     switch_tab("projects");
 
     document
-        .querySelector(`[data-project-id="${project_id}"]`)
+        .querySelector(`.project-card[data-project-id="${project_id}"]`)
         ?.scrollIntoView({ behavior: "smooth", block: "center" });
 });

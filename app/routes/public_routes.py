@@ -21,8 +21,9 @@ def home():
         polygon_data=polygon_data,
         project_sites=project_sites,
         gnd_sites=gnd_sites,
-        projects=projects
+        projects=projects,
     )
+
 
 @public_bp.route("/alert/<int:alert_id>")
 def alert_by_id(alert_id):
@@ -31,9 +32,11 @@ def alert_by_id(alert_id):
         return jsonify({"error": "Alert not found"}), 404
     return jsonify(alert)
 
+
 @public_bp.route("/warnings")
 def warnings():
     return jsonify(get_all_warnings())
+
 
 @public_bp.route("/warnings/project/<int:project_id>")
 def project_warnings(project_id):

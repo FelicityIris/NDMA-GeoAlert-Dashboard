@@ -18,6 +18,17 @@
             </div>
 
             <div id="projects-tab" class="tab-content active">
+                <div class="project-search-container">
+                    <input
+                        id="project-search"
+                        class="project-search"
+                        type="text"
+                        placeholder="Search projects..."
+                    >
+
+                    <div id="project-search-results" class="project-search-results"></div>
+                </div>
+
                 {% if projects %}
                     {% for project in projects %}
                     <div
@@ -230,9 +241,11 @@
         const polygon_data = {{ polygon_data | tojson }};
         const project_sites =  {{ project_sites | tojson }};
         const gnd_sites = {{ gnd_sites | tojson }};
+        const warning_projects = {{ projects | map(attribute="project_id") | list | tojson }};
     </script>
 
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
     <script src="{{ url_for('static', filename='js/projects.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tabs.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}

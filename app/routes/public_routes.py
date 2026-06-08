@@ -25,6 +25,16 @@ def home():
     )
 
 
+@public_bp.route("/about")
+def about():
+    return render_template("public/about.html")
+
+
+@public_bp.route("/api/docs")
+def api_docs():
+    return render_template("public/api-docs.html")
+
+
 @public_bp.route("/api/alert/<int:alert_id>")
 def alert_by_id(alert_id):
     alert = get_alert_by_id(alert_id)

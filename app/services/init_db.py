@@ -128,6 +128,27 @@ def seed_project_sites(cursor):
         )
 
 
+def seed_settings(cursor):
+    try:
+        cursor.execute(
+            """
+            INSERT INTO settings
+            VALUES
+                ('scheduler_minutes', '15'),
+                ('request_delay_seconds', '1'),
+                ('max_retries', '3'),
+                ('retry_delay_seconds', '5'),
+                ('warning_distance_km', '50'),
+                ('severity_extreme', '#d20f39'),
+                ('severity_severe', '#fe640b'),
+                ('severity_moderate', '#df8e1d'),
+                ('severity_minor', '#40a02b');
+            """
+        )
+    except Exception as error_msg:
+        print(f"Error: Failed to seed settings.")
+        print(error_msg)
+
 def seed_database():
     connection = get_connection()
 
@@ -145,6 +166,9 @@ def seed_database():
             if table_is_empty(cursor, table_name="project_sites"):
                 print("Seeding Project Sites Data...")
                 seed_project_sites(cursor)
+            if table_is_empty(cursor, table_name="settings"):
+                print("Seeding Default Settings...")
+                seed_settings(cursor)
         connection.commit()
     finally:
         connection.close()

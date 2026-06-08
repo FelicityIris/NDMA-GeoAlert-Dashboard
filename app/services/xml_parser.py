@@ -4,26 +4,28 @@ import xml.etree.ElementTree as ET
 from dateutil import parser
 
 from app.services.http_client import session
+from app.services.settings_service import get_settings
 
 NAMESPACE = {"cap": "urn:oasis:names:tc:emergency:cap:1.2"}
-MAX_RETRIES = 3
-RETRY_DELAY_SECONDS= 5
 
 def fetch_resource_xml(url):
-    for attempt in range(MAX_RETRIES):
+    settings = get_settings()
+    max_retries = int(settings["max_retries"])
+    retry_delay = int(settings["retry_delay_seconds"])
+    for attempt in range(max_retries):
         try:
             response = session.get(url, timeout=10)
             response.raise_for_status()
             return response.text
         except Exception as error_msg:
             print(f"Resource fetch failed for: {url}")
-            print(f"Trying again in {RETRY_DELAY_SECONDS} seconds. Attempt: {attempt+1} / {MAX_RETRIES}")
+            print(f"Trying again in {retry_delay} seconds. Attempt: {attempt+1} / {max_retries}")
             print(f"{error_msg}")
 
-            if attempt == MAX_RETRIES -1:
+            if attempt == max_retries -1:
                 raise
 
-            time.sleep(RETRY_DELAY_SECONDS)
+            time.sleep(retry_delay)
 
 
 def parse_polygon_xml(xml_data):

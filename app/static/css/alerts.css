@@ -225,22 +225,26 @@
 }
 
 .severity-extreme {
-    background: var(--bg-secondary);
-    border: 1px solid var(--color-danger);
+    background: var(--severity-extreme);
+    border: 2px solid var(--text-primary);
 }
 
 .severity-severe {
-    background: var(--color-danger);
+    background: var(--severity-severe);
+    border: 2px solid var(--text-primary);
 }
 
 .severity-moderate {
-    background: var(--color-caution);
+    background: var(--severity-moderate);
+    border: 2px solid var(--text-primary);
 }
 
 .severity-minor {
-    background: var(--color-warning);
+    background: var(--severity-minor);
+    border: 2px solid var(--text-primary);
 }
 
 .severity-unknown {
     background: var(--accent);
+    border: 2px solid var(--text-primary);
 }

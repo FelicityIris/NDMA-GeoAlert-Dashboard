@@ -5,6 +5,16 @@
         <meta name="viewport" content="width = device-width, initial-scale = 1.0">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'css/main.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename = 'vendor/leaflet/leaflet.css') }}">
+
+        <style>
+            :root {
+                --severity-extreme: {{ settings.severity_extreme }};
+                --severity-severe: {{ settings.severity_severe }};
+                --severity-moderate: {{ settings.severity_moderate }};
+                --severity-minor: {{ settings.severity_minor }};
+            }
+        </style>
+
         <title>{% block title %}NDMA Alerts Filter{% endblock %}</title>
     </head>
 

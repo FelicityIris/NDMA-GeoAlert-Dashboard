@@ -106,6 +106,11 @@ CREATE TABLE IF NOT EXISTS feed_cache (
     ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS settings (
+    setting_key VARCHAR(100) PRIMARY KEY,
+    setting_value VARCHAR(255) NOT NULL
+);
+
 -- CREATE INDEX idx_alert_effective ON alerts(effective);
 
 -- CREATE INDEX idx_alert_expires ON alerts(expires);

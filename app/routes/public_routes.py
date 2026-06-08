@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, render_template
 
 from app.services.alert_service import get_alert_by_id, get_all_alerts, get_polygon_data
+from app.services.settings_service import get_settings
 from app.services.site_service import get_gnd_sites, get_project_sites
 from app.services.warning_service import get_all_warnings, get_project_warnings
 
@@ -14,6 +15,7 @@ def home():
     project_sites = get_project_sites()
     gnd_sites = get_gnd_sites()
     projects = get_all_warnings()
+    settings = get_settings()
 
     return render_template(
         "public/index.html",
@@ -22,6 +24,12 @@ def home():
         project_sites=project_sites,
         gnd_sites=gnd_sites,
         projects=projects,
+        severity_colors={
+            "Extreme": settings["severity_extreme"],
+            "Moderate": settings["severity_moderate"],
+            "Severe": settings["severity_severe"],
+            "Minor": settings["severity_minor"],
+        },
     )
 
 

@@ -3,7 +3,9 @@ from functools import wraps
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for
 
 from app.auth.auth_service import validate_admin_login
+from app.scheduler.scheduler_service import reload_scheduler
 from app.services.ingestion_service import ingest_alerts
+from app.services.settings_service import get_settings, update_settings
 from app.services.state_service import get_all_states, update_selected_states
 
 admin_bp = Blueprint("admin", __name__)
@@ -24,10 +26,12 @@ def admin_required(view):
 @admin_required
 def admin_dashboard():
     states = get_all_states()
-    return render_template("admin/dashboard.html", states=states)
+    settings = get_settings()
+    return render_template("admin/dashboard.html", states=states, settings=settings)
 
 
 @admin_bp.route("/admin/states", methods=["POST"])
+@admin_required
 def update_states():
     selected_states = request.form.getlist("selected_states")
     selected_states = [int(state_id) for state_id in selected_states]
@@ -36,6 +40,7 @@ def update_states():
 
 
 @admin_bp.route("/admin/ingest")
+@admin_required
 def admin_ingest():
     ingest_alerts()
     return redirect(url_for("admin.admin_dashboard"))
@@ -59,3 +64,27 @@ def admin_login():
 def admin_logout():
     session.clear()
     return redirect(url_for("admin.admin_login"))
+
+
+@admin_bp.route("/settings", methods=["POST"])
+@admin_required
+def update_settings_route():
+    update_settings(
+        {
+            "scheduler_minutes": request.form["scheduler_minutes"],
+            "request_delay_seconds": request.form["request_delay_seconds"],
+            "max_retries": request.form["max_retries"],
+            "retry_delay_seconds": request.form["retry_delay_seconds"],
+            "warning_distance_km": request.form["warning_distance_km"],
+            "severity_extreme": request.form["severity_extreme"],
+            "severity_severe": request.form["severity_severe"],
+            "severity_moderate": request.form["severity_moderate"],
+            "severity_minor": request.form["severity_minor"],
+        }
+    )
+
+    reload_scheduler()
+
+    flash("Settings updated successfully.")
+
+    return redirect(url_for("admin.admin_dashboard"))

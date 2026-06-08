@@ -6,11 +6,10 @@ from shapely.ops import nearest_points
 
 from app.services.alert_service import get_active_alerts
 from app.services.db import get_connection
+from app.services.settings_service import get_settings
 from app.services.site_service import get_gnd_sites, get_project_sites
 
 GEOD = Geod(ellps="WGS84")
-
-WARNING_DISTANCE_KM = 50
 
 
 def parse_polygons(polygon_string):
@@ -31,6 +30,8 @@ def distance_to_polygon_km(point, polygon):
 
 
 def evaluate_site_against_alert(site, alert):
+    settings = get_settings()
+    warning_distance_km = int(settings["warning_distance_km"])
     point = Point(site["lng"], site["lat"])
 
     nearest_distance = None
@@ -46,7 +47,7 @@ def evaluate_site_against_alert(site, alert):
         if nearest_distance is None or distance_km < nearest_distance:
             nearest_distance = distance_km
 
-    if nearest_distance is not None and nearest_distance <= WARNING_DISTANCE_KM:
+    if nearest_distance is not None and nearest_distance <= warning_distance_km:
         return {
             "warning_type": "NEAR_ALERT_POLYGON",
             "distance_km": round(nearest_distance, 2),

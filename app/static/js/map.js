@@ -40,11 +40,18 @@ polygon_data.forEach((alert) => {
 
     polygon_layers[alert.alert_id] = [];
 
+    const severity_colors = {
+        Extreme: getComputedStyle(document.documentElement).getPropertyValue("--severity-extreme"),
+        Severe: getComputedStyle(document.documentElement).getPropertyValue("--severity-severe"),
+        Moderate: getComputedStyle(document.documentElement).getPropertyValue("--severity-moderate"),
+        Minor: getComputedStyle(document.documentElement).getPropertyValue("--severity-minor")
+    };
+
     let polygon_color = "";
-    if (alert.severity === "Extreme") polygon_color = "black";
-    else if (alert.severity === "Severe") polygon_color = "red";
-    else if (alert.severity === "Moderate") polygon_color = "orange";
-    else if (alert.severity === "Minor") polygon_color = "yellow";
+    if (alert.severity === "Extreme") polygon_color = severity_colors["Extreme"];
+    else if (alert.severity === "Severe") polygon_color = severity_colors["Severe"];
+    else if (alert.severity === "Moderate") polygon_color = severity_colors["Moderate"];
+    else if (alert.severity === "Minor") polygon_color = severity_colors["Minor"];
     else polygon_color = "#3388ff";
 
     alert.polygons.forEach((polygon) => {

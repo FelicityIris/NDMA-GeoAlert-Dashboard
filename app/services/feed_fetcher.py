@@ -5,16 +5,19 @@ import feedparser
 
 from app.services.feed_cache_service import get_feed_cache, update_feed_cache
 from app.services.http_client import session
+from app.services.settings_service import get_settings
 
 BASE_RSS_URL = "https://sachet.ndma.gov.in/cap_public_website/rss/"
-MAX_RETRIES = 3
-RETRY_DELAY_SECONDS= 5
+
 
 def generate_feed_url(feed_slug):
     return f"{BASE_RSS_URL}rss_{feed_slug}.xml"
 
 
 def fetch_rss_feed(feed_slug):
+    settings = get_settings()
+    max_retries = int(settings["max_retries"])
+    retry_delay = int(settings["retry_delay_seconds"])
     url = generate_feed_url(feed_slug)
 
     cached_feed = get_feed_cache(feed_slug)
@@ -25,7 +28,7 @@ def fetch_rss_feed(feed_slug):
         if cached_feed["last_modified"]:
             headers["If-Modified-Since"] = cached_feed["last_modified"]
 
-    for attempt in range(MAX_RETRIES):
+    for attempt in range(max_retries):
         try:
             response = session.get(url, headers=headers, timeout=10)
 
@@ -42,13 +45,15 @@ def fetch_rss_feed(feed_slug):
             return response.text
         except Exception as error_msg:
             print(f"Error: Failed to fetch RSS Feed [State Feed Slug: {feed_slug}]")
-            print(f"Trying again in {RETRY_DELAY_SECONDS} seconds. Attempt: {attempt+1} / {MAX_RETRIES}")
+            print(
+                f"Trying again in {retry_delay} seconds. Attempt: {attempt+1} / {max_retries}"
+            )
             print(f"{error_msg}")
 
-            if attempt == MAX_RETRIES -1:
+            if attempt == max_retries - 1:
                 raise
 
-            time.sleep(RETRY_DELAY_SECONDS)
+            time.sleep(retry_delay)
 
 
 def extract_alert_links(rss_data):

@@ -101,6 +101,117 @@
                 <button class="sync-button">Run Manual Synchronization</button>
             </a>
         </div>
+
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <div>
+                    <h2>Application Settings</h2>
+
+                    <p>Configure synchronization and warning behavior.</p>
+                </div>  
+            </div>
+
+            <form method="POST" action="{{ url_for('admin.update_settings_route') }}">
+                <div class="settings-grid">
+                    <label>
+                        Scheduler Interval (minutes)
+
+                        <input
+                            type="number"
+                            name="scheduler_minutes"
+                            value="{{ settings.scheduler_minutes }}"
+                        >
+                    </label>
+
+                    <label>
+                        Request Delay (seconds)
+
+                        <input
+                            type="number"
+                            name="request_delay_seconds"
+                            value="{{ settings.request_delay_seconds }}"
+                        >
+                    </label>
+
+                    <label>
+                        Max Retries
+
+                        <input
+                            type="number"
+                            name="max_retries"
+                            value="{{ settings.max_retries }}"
+                        >
+                    </label>
+
+                    <label>
+                        Retry Delay (seconds)
+
+                        <input
+                            type="number"
+                            name="retry_delay_seconds"
+                            value="{{ settings.retry_delay_seconds }}"
+                        >
+                    </label>
+
+                    <label>
+                        Warning Distance (KMs)
+
+                        <input
+                            type="number"
+                            name="warning_distance_km"
+                            value="{{ settings.warning_distance_km }}"
+                        >
+                    </label>
+
+                    <label>
+                        Extreme Severity Color
+
+                        <input
+                            type="color"
+                            name="severity_extreme"
+                            value="{{ settings.severity_extreme }}"
+                        >
+                    </label>
+
+                    <label>
+                        Severe Severity Color
+
+                        <input
+                            type="color"
+                            name="severity_severe"
+                            value="{{ settings.severity_severe }}"
+                        >
+                    </label>
+
+                    <label>
+                        Moderate Severity Color
+
+                        <input
+                            type="color"
+                            name="severity_moderate"
+                            value="{{ settings.severity_moderate }}"
+                        >
+                    </label>
+
+                    <label>
+                        Minor Severity Color
+
+                        <input
+                            type="color"
+                            name="severity_minor"
+                            value="{{ settings.severity_minor }}"
+                        >
+                    </label>
+
+                </div>
+
+                <div class="settings-actions">
+                    <button type="submit" class="primary-button">
+                        Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>

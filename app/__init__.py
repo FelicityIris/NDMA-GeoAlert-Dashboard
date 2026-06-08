@@ -5,6 +5,7 @@ from flask import Flask
 
 from app.scheduler.scheduler_service import start_scheduler
 from app.services.init_db import initialize_database
+from app.services.settings_service import get_settings
 
 
 def create_app():
@@ -17,6 +18,10 @@ def create_app():
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
     initialize_database()
+
+    @app.context_processor
+    def inject_settings():
+        return {"settings": get_settings()}
 
     from app.routes.admin_routes import admin_bp
     from app.routes.public_routes import public_bp

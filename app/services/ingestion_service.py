@@ -7,15 +7,16 @@ from app.services.alert_service import (
     save_alert,
 )
 from app.services.feed_fetcher import extract_identifer_from_link, get_alert_links
+from app.services.settings_service import get_settings
 from app.services.state_service import get_selected_states
 from app.services.warning_service import refresh_warnings
 from app.services.xml_parser import fetch_and_parse_alert
 
-REQUEST_DELAY_SECONDS = 1
-
 
 def ingest_alerts():
     selected_states = get_selected_states()
+    settings = get_settings()
+    request_delay = int(settings["request_delay_seconds"])
 
     for state in selected_states:
         state_id = state["state_id"]
@@ -42,8 +43,8 @@ def ingest_alerts():
                     print(f"Error: Failed to fetch XML [Link: {link}]")
                     print(error)
                 finally:
-                    print(f"Fetching next XML in { REQUEST_DELAY_SECONDS } seconds.")
-                    time.sleep(REQUEST_DELAY_SECONDS)
+                    print(f"Fetching next XML in { request_delay } seconds.")
+                    time.sleep(request_delay)
         except Exception as error_msg:
             print(f"Error: Failed to fetch RSS Feed [State Feed Slug: {feed_slug}]")
             print(error_msg)

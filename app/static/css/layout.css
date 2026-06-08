@@ -15,7 +15,7 @@
     border: 1px solid var(--border);
     border-radius: 18px;
     background: var(--bg-secondary);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.35);
     transition:
         width 0.3s ease,
         margin 0.3s ease,

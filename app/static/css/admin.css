@@ -2,6 +2,7 @@
     max-width: 1100px;
     margin: 0 auto;
     padding: 2rem;
+    overflow-y: auto;
 }
 
 .admin-header {
@@ -109,7 +110,7 @@
 }
 
 .state-editor.expanded {
-    max-height: 80vh;
+    max-height: 100vh;
     overflow-y: auto;
     opacity: 1;
     margin-top: 1.5rem;

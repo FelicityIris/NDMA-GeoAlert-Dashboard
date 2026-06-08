@@ -6,6 +6,23 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors"
 }).addTo(map);
 
+fetch("/static/geojson/india-composite.geojson")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data, {
+            interactive: false,
+            style: {
+                color: "#ff9933",
+                weight: 3,
+                opacity: 1,
+                fillOpacity: 0
+            }
+        }).addTo(map);
+    })
+    .catch((error) => {
+        console.error("Failed to load India boundary overlay:", error);
+    });
+
 const parse_polygon = (polygon_string) => {
     return polygon_string
         .trim()

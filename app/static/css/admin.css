@@ -268,3 +268,21 @@
     justify-content: flex-end;
     margin-top: 1rem;
 }
+
+.log-viewer {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    border-radius: 14px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border);
+    font-family: monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.log-line {
+    white-space: pre-wrap;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}

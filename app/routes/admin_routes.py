@@ -5,6 +5,7 @@ from flask import Blueprint, flash, redirect, render_template, request, session,
 from app.auth.auth_service import validate_admin_login
 from app.scheduler.scheduler_service import reload_scheduler
 from app.services.ingestion_service import ingest_alerts
+from app.services.log_service import get_recent_logs
 from app.services.settings_service import get_settings, update_settings
 from app.services.state_service import get_all_states, update_selected_states
 
@@ -27,7 +28,10 @@ def admin_required(view):
 def admin_dashboard():
     states = get_all_states()
     settings = get_settings()
-    return render_template("admin/dashboard.html", states=states, settings=settings)
+    logs = get_recent_logs()
+    return render_template(
+        "admin/dashboard.html", states=states, settings=settings, logs=logs
+    )
 
 
 @admin_bp.route("/admin/states", methods=["POST"])

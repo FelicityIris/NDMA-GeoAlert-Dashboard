@@ -91,20 +91,6 @@
         <div class="admin-card">
             <div class="admin-card-header">
                 <div>
-                    <h2>Manual Synchronization</h2>
-                    
-                    <p>Trigger immediate CAP feed synchronization across selected states.</p>
-                </div>
-            </div>
-
-            <a href="{{ url_for('admin.admin_ingest') }}" class="sync-link">
-                <button class="sync-button">Run Manual Synchronization</button>
-            </a>
-        </div>
-
-        <div class="admin-card">
-            <div class="admin-card-header">
-                <div>
                     <h2>Application Settings</h2>
 
                     <p>Configure synchronization and warning behavior.</p>
@@ -211,6 +197,36 @@
                     </button>
                 </div>
             </form>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <div>
+                    <h2>Manual Synchronization</h2>
+                    
+                    <p>Trigger immediate CAP feed synchronization across selected states.</p>
+                </div>
+            </div>
+
+            <a href="{{ url_for('admin.admin_ingest') }}" class="sync-link">
+                <button class="sync-button">Run Manual Synchronization</button>
+            </a>
+        </div>
+
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <div>
+                    <h2>Logs</h2>
+
+                    <p>Recent ingestion and system activity.</p>
+                </div>
+            </div>
+
+            <div class="log-viewer">
+                {% for log in logs %}
+                    <div class="log-line">{{ log }}</div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

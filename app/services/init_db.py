@@ -1,4 +1,5 @@
 import csv
+import logging
 import os
 from pathlib import Path
 
@@ -41,7 +42,7 @@ def table_is_empty(cursor, table_name):
 
 def seed_states(cursor):
     try:
-        print(STATES_DATA)
+        logging.info(STATES_DATA)
         with open(STATES_DATA, newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
@@ -130,8 +131,7 @@ def seed_project_sites(cursor):
 
 def seed_settings(cursor):
     try:
-        cursor.execute(
-            """
+        cursor.execute("""
             INSERT INTO settings
             VALUES
                 ('scheduler_minutes', '15'),
@@ -143,11 +143,11 @@ def seed_settings(cursor):
                 ('severity_severe', '#fe640b'),
                 ('severity_moderate', '#df8e1d'),
                 ('severity_minor', '#40a02b');
-            """
-        )
+            """)
     except Exception as error_msg:
-        print(f"Error: Failed to seed settings.")
-        print(error_msg)
+        logging.error(f"Error: Failed to seed settings.")
+        logging.error(error_msg)
+
 
 def seed_database():
     connection = get_connection()
@@ -155,19 +155,19 @@ def seed_database():
     try:
         with connection.cursor() as cursor:
             if table_is_empty(cursor, "states"):
-                print("Seeding States Data...")
+                logging.info("Seeding States Data...")
                 seed_states(cursor)
             if table_is_empty(cursor, "districts"):
-                print("Seeding Districts Data...")
+                logging.info("Seeding Districts Data...")
                 seed_districts(cursor)
             if table_is_empty(cursor, table_name="gnd_sites"):
-                print("Seeding GND Sites Data...")
+                logging.info("Seeding GND Sites Data...")
                 seed_gnd_sites(cursor)
             if table_is_empty(cursor, table_name="project_sites"):
-                print("Seeding Project Sites Data...")
+                logging.info("Seeding Project Sites Data...")
                 seed_project_sites(cursor)
             if table_is_empty(cursor, table_name="settings"):
-                print("Seeding Default Settings...")
+                logging.info("Seeding Default Settings...")
                 seed_settings(cursor)
         connection.commit()
     finally:
@@ -177,4 +177,4 @@ def seed_database():
 def initialize_database():
     execute_schema()
     seed_database()
-    print("Database initialization complete.")
+    logging.info("Database initialization complete.")

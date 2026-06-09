@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 from app.services.db import get_connection
@@ -228,7 +229,7 @@ def get_alert_by_id(alert_id):
                 FROM alerts
                 WHERE alert_id = %s
                 """,
-                (alert_id,)
+                (alert_id,),
             )
             return cursor.fetchone()
     finally:
@@ -244,11 +245,11 @@ def delete_expired_alerts():
                 WHERE expires IS NOT NULL
                 AND expires < NOW()
                 """)
-        print("Expired XMLs successfully deleted")
+        logging.info("Expired XMLs successfully deleted")
         connection.commit()
     except Exception as error_msg:
-        print(f"Error: Failed to delete expired XMLs")
-        print(error_msg)
+        logging.error(f"Error: Failed to delete expired XMLs")
+        logging.error(error_msg)
     finally:
         connection.close()
 

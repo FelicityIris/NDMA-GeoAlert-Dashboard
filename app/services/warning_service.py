@@ -1,3 +1,4 @@
+import logging
 from collections import defaultdict
 
 from pyproj import Geod
@@ -158,11 +159,11 @@ def refresh_warnings():
                         warning["distance_km"],
                     ),
                 )
-        print("Warnings regenerated and stored in DB")
+        logging.info("Warnings regenerated and stored in DB")
         connection.commit()
     except Exception as error_msg:
-        print(f"Error: Failed to regenerate warnings")
-        print(error_msg)
+        logging.error(f"Error: Failed to regenerate warnings")
+        logging.error(error_msg)
     finally:
         connection.close()
 

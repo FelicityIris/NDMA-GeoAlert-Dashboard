@@ -1,3 +1,4 @@
+import logging
 import time
 import xml.etree.ElementTree as ET
 
@@ -7,6 +8,7 @@ from app.services.http_client import session
 from app.services.settings_service import get_settings
 
 NAMESPACE = {"cap": "urn:oasis:names:tc:emergency:cap:1.2"}
+
 
 def fetch_resource_xml(url):
     settings = get_settings()
@@ -18,11 +20,13 @@ def fetch_resource_xml(url):
             response.raise_for_status()
             return response.text
         except Exception as error_msg:
-            print(f"Resource fetch failed for: {url}")
-            print(f"Trying again in {retry_delay} seconds. Attempt: {attempt+1} / {max_retries}")
-            print(f"{error_msg}")
+            logging.error(f"Resource fetch failed for: {url}")
+            logging.info(
+                f"Trying again in {retry_delay} seconds. Attempt: {attempt+1} / {max_retries}"
+            )
+            logging.error(f"{error_msg}")
 
-            if attempt == max_retries -1:
+            if attempt == max_retries - 1:
                 raise
 
             time.sleep(retry_delay)
@@ -108,8 +112,8 @@ def parse_alert_xml(xml_data):
             polygon_xml = fetch_resource_xml(polygon_url)
             polygons = parse_polygon_xml(polygon_xml)
         except Exception as error:
-            print(f"Failed to fetch polygon: {polygon_url}")
-            print(error)
+            logging.error(f"Failed to fetch polygon: {polygon_url}")
+            logging.error(error)
     alert_data["polygons"] = polygons
 
     alert_data["district_codes"] = extract_district_codes(root)

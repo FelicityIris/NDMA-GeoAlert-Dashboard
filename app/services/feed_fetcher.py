@@ -1,3 +1,4 @@
+import logging
 import time
 from urllib.parse import parse_qs, urlparse
 
@@ -33,7 +34,9 @@ def fetch_rss_feed(feed_slug):
             response = session.get(url, headers=headers, timeout=10)
 
             if response.status_code == 304:
-                print(f"RSS Feed Unchanged, skipping [State Feed Slug: {feed_slug}]")
+                logging.info(
+                    f"RSS Feed Unchanged, skipping [State Feed Slug: {feed_slug}]"
+                )
                 return None
 
             response.raise_for_status()
@@ -44,11 +47,13 @@ def fetch_rss_feed(feed_slug):
 
             return response.text
         except Exception as error_msg:
-            print(f"Error: Failed to fetch RSS Feed [State Feed Slug: {feed_slug}]")
-            print(
+            logging.error(
+                f"Error: Failed to fetch RSS Feed [State Feed Slug: {feed_slug}]"
+            )
+            logging.info(
                 f"Trying again in {retry_delay} seconds. Attempt: {attempt+1} / {max_retries}"
             )
-            print(f"{error_msg}")
+            logging.error(f"{error_msg}")
 
             if attempt == max_retries - 1:
                 raise

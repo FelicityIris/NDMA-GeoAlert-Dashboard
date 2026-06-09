@@ -254,6 +254,13 @@
         const gnd_sites = {{ gnd_sites | tojson }};
         const warning_projects = {{ projects | map(attribute="project_id") | list | tojson }};
         const severity_colors = {{ severity_colors | tojson }};
+
+        const AUTO_REFRESH_INTERVAL_MS = 600000;
+        if (window.location.pathname === "/") {
+            setInterval(() => {
+                if (!document.hidden) { window.location.reload(); }
+            }, AUTO_REFRESH_INTERVAL_MS);
+        }
     </script>
 
     <script src="{{ url_for('static', filename='js/modal.js') }}"></script>

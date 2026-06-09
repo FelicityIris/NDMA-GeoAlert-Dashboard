@@ -181,10 +181,14 @@ def get_all_warnings():
 
                     alerts.event,
                     alerts.severity,
-                    alerts.expires
+                    alerts.expires,
+
+                    states.state_name
                 FROM warnings
                 JOIN alerts
                     ON warnings.alert_id = alerts.alert_id
+                JOIN states
+                    ON alerts.state_id = states.state_id
                 ORDER BY
                     warnings.distance_km
                 """)
@@ -208,6 +212,7 @@ def get_all_warnings():
                     "alert_id": warning["alert_id"],
                     "event": warning["event"],
                     "severity": warning["severity"],
+                    "state_name": warning["state_name"],
                     "expires": warning["expires"],
                     "warning_type": warning["warning_type"],
                     "distance_km": warning["distance_km"],

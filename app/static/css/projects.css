@@ -93,3 +93,15 @@
     width: 20px;
     height: 20px;
 }
+
+.project-alert-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+}
+
+.project-alert-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}

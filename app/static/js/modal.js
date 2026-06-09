@@ -1,26 +1,162 @@
 function renderAlertModal(alert) {
     const modal_body = document.getElementById("modal-body");
 
+    const districts = (alert.district_names || [])
+        .map((district) => `<span class="district-tag">${district}</span>`)
+        .join("");
+
+    const projects = (alert.affected_projects || [])
+        .map(
+            (project) =>
+                `<button
+                        class="project-tag"
+                        data-project-id="${project.project_id}"
+                    >
+                        ${project.project_name}
+                    </button>`
+        )
+        .join("");
+
     modal_body.innerHTML = `
-        <h2>${alert.event}</h2>
-        <div class="alert-headline-box">
-            ${alert.headline_en ?? ""}
-        </div>
+        <div class="alert-card modal-alert-card">
+            <div class="alert-summary">
+                <div class="alert-summary-left">
+                    <div
+                        class="severity-indicator severity-${(alert.severity || "unknown").toLowerCase()}"
+                    ></div>
 
-        <div class="alert-detail-grid">
-            <div class="detail-item">
-                <label>Severity</label>
-                <span>${alert.severity}</span>
+                    <div class="alert-summary-text">
+                        <div class="alert-title-row">
+                            <h3 class="alert-event">
+                                ${alert.event ?? ""}
+                            </h3>
+
+                            <span class="alert-identifier">
+                                ${alert.alert_identifier ?? ""}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                ${
+                    alert.expires
+                        ? `
+                        <div class="alert-summary-right">
+                            <div class="alert-expiry">
+                                <label>Valid Until</label>
+
+                                <span>
+                                    ${alert.expires}
+                                </span>
+                            </div>
+                        </div>
+                        `
+                        : ""
+                }
             </div>
 
-            <div class="detail-item">
-                <label>Urgency</label>
-                <span>${alert.urgency}</span>
-            </div>
+            <div class="alert-details modal-alert-details">
+                <div class="alert-headline-box">
+                    ${alert.headline_en ?? ""}
+                </div>
 
-            <div class="detail-item">
-                <label>Certainty</label>
-                <span>${alert.certainty}</span>
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        Alert Classification
+                    </div>
+
+                    <div class="alert-detail-grid">
+
+                        <div class="detail-item">
+                            <label>Severity</label>
+                            <span>${alert.severity ?? "-"}</span>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Urgency</label>
+                            <span>${alert.urgency ?? "-"}</span>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Certainty</label>
+                            <span>${alert.certainty ?? "-"}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        Timeline
+                    </div>
+
+                    <div class="alert-detail-grid">
+                        ${
+                            alert.effective
+                                ? `
+                                <div class="detail-item">
+                                    <label>Effective</label>
+                                    <span>${alert.effective}</span>
+                                </div>
+                                `
+                                : ""
+                        }
+
+                        ${
+                            alert.onset
+                                ? `
+                                <div class="detail-item">
+                                    <label>Onset</label>
+                                    <span>${alert.onset}</span>
+                                </div>
+                                `
+                                : ""
+                        }
+
+                        ${
+                            alert.expires
+                                ? `
+                                <div class="detail-item">
+                                    <label>Expires</label>
+                                    <span>${alert.expires}</span>
+                                </div>
+                                `
+                                : ""
+                        }
+
+                    </div>
+                </div>
+
+                ${
+                    districts
+                        ? `
+                        <div class="detail-section">
+                            <div class="detail-section-title">
+                                Affected Districts
+                            </div>
+
+                            <div class="district-tags">
+                                ${districts}
+                            </div>
+                        </div>
+                        `
+                        : ""
+                }
+
+                ${
+                    projects
+                        ? `
+                        <div class="detail-section">
+                            <div class="detail-section-title">
+                                Affected Projects
+                            </div>
+
+                            <div class="project-tags">
+                                ${projects}
+                            </div>
+                        </div>
+                        `
+                        : ""
+                }
             </div>
         </div>
     `;

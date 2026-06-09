@@ -61,6 +61,16 @@
                                     <span class="severity-indicator severity-{{ alert.severity|lower }}"></span>
 
                                     <span class="project-alert-title">{{ alert.event }}</span>
+
+                                    <span class="project-alert-meta">
+                                        {{ alert.state_name }}
+                                        •
+                                        {% if alert.warning_type == "INSIDE_ALERT_POLYGON" %}
+                                            Inside Affected Area
+                                        {% else %}
+                                            {{ "%.1f"|format(alert.distance_km) }} KM away
+                                        {% endif %}
+                                    </span>
                                 </button>
                             {% endfor %}
                         </div>
@@ -222,7 +232,7 @@
 
     <div id="alert-modal" class="modal">
         <div class="modal-content">
-            <button id="close-modal" class="close-modal">✕</button>
+            <button id="close-modal" class="close-modal"><i data-lucide="x"></i></button>
 
             <div id="modal-body"></div>
         </div>

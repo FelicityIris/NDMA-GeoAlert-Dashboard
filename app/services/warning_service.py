@@ -102,21 +102,11 @@ def generate_warnings():
             if not warning:
                 continue
 
-            if site["site_type"] == "PROJECT":
-                warning_site_name = site["site_name"]
-            else:
-                project = project_lookup.get(site["project_id"])
-
-                if not project:
-                    continue
-
-                warning_site_name = project["project_name"]
-
-            warning_key = (warning_site_name, alert["alert_id"])
+            warning_key = (site["site_name"], alert["alert_id"])
 
             candidate = {
                 "site_type": site["site_type"],
-                "site_name": warning_site_name,
+                "site_name": site["site_name"],
                 "project_id": site["project_id"],
                 "alert_id": alert["alert_id"],
                 "event": alert["event"],
@@ -170,11 +160,23 @@ def refresh_warnings():
 
 def get_all_warnings():
     connection = get_connection()
+
     try:
         with connection.cursor() as cursor:
             cursor.execute("""
                 SELECT
+                    project_id,
+                    project_name
+                FROM project_sites
+                """)
+            project_names = {
+                row["project_id"]: row["project_name"] for row in cursor.fetchall()
+            }
+
+            cursor.execute("""
+                SELECT
                     warnings.alert_id,
+                    warnings.site_type,
                     warnings.site_name,
                     warnings.project_id,
                     warnings.warning_type,
@@ -185,11 +187,15 @@ def get_all_warnings():
                     alerts.expires,
 
                     states.state_name
+
                 FROM warnings
+
                 JOIN alerts
                     ON warnings.alert_id = alerts.alert_id
+
                 JOIN states
                     ON alerts.state_id = states.state_id
+
                 ORDER BY
                     warnings.distance_km
                 """)
@@ -199,30 +205,52 @@ def get_all_warnings():
 
         for warning in warnings:
             project_id = warning["project_id"]
-            project_name = warning["site_name"]
 
-            if project_name not in projects:
-                projects[project_name] = {
+            if project_id is None:
+                continue
+
+            project_name = project_names.get(project_id, f"Project {project_id}")
+
+            if project_id not in projects:
+                projects[project_id] = {
                     "project_id": project_id,
                     "project_name": project_name,
-                    "alerts": [],
+                    "alerts": {},
                 }
 
-            projects[project_name]["alerts"].append(
-                {
-                    "alert_id": warning["alert_id"],
+            alert_id = warning["alert_id"]
+
+            if alert_id not in projects[project_id]["alerts"]:
+                projects[project_id]["alerts"][alert_id] = {
+                    "alert_id": alert_id,
                     "event": warning["event"],
                     "severity": warning["severity"],
                     "state_name": warning["state_name"],
                     "expires": warning["expires"],
                     "warning_type": warning["warning_type"],
                     "distance_km": warning["distance_km"],
+                    "affected_sites": [],
                 }
-            )
+
+            alert = projects[project_id]["alerts"][alert_id]
+
+            alert["affected_sites"].append(warning["site_name"])
+
+            alert["distance_km"] = min(alert["distance_km"], warning["distance_km"])
+
+        result = []
+
+        for project in projects.values():
+            project["alerts"] = list(project["alerts"].values())
+
+            result.append(project)
 
         return sorted(
-            projects.values(), key=lambda project: len(project["alerts"]), reverse=True
+            result,
+            key=lambda project: len(project["alerts"]),
+            reverse=True,
         )
+
     finally:
         connection.close()
 
@@ -285,11 +313,36 @@ def get_project_warnings(project_id):
                     "message": "No active alerts affecting this project site.",
                 }
 
+            alerts = {}
+
+            for warning in warnings:
+                alert_id = warning["alert_id"]
+
+                if alert_id not in alerts:
+                    alerts[alert_id] = {
+                        "alert_id": alert_id,
+                        "project_id": warning["project_id"],
+                        "event": warning["event"],
+                        "severity": warning["severity"],
+                        "expires": warning["expires"],
+                        "warning_type": warning["warning_type"],
+                        "distance_km": warning["distance_km"],
+                        "affected_sites": [],
+                    }
+
+                alerts[alert_id]["affected_sites"].append(warning["site_name"])
+
+                alerts[alert_id]["distance_km"] = min(
+                    alerts[alert_id]["distance_km"], warning["distance_km"]
+                )
+
+            grouped_warnings = list(alerts.values())
+
             return {
                 "project_exists": True,
                 "project": project,
-                "warning_count": len(warnings),
-                "warnings": warnings,
+                "warning_count": len(grouped_warnings),
+                "warnings": grouped_warnings,
             }
     finally:
         connection.close()

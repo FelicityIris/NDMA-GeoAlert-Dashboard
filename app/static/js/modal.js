@@ -1,3 +1,11 @@
+const alerts_by_id = {};
+
+state_dashboard.forEach((state) => {
+    state.alerts.forEach((alert) => {
+        alerts_by_id[alert.alert_id] = alert;
+    });
+});
+
 function renderAlertModal(alert) {
     const modal_body = document.getElementById("modal-body");
 
@@ -164,9 +172,12 @@ function renderAlertModal(alert) {
 
 document.querySelectorAll(".project-alert-item").forEach((button) => {
     button.addEventListener("click", async () => {
-        const alert_id = button.dataset.alertId;
-        const response = await fetch(`/api/alert/${alert_id}`);
-        const alert = await response.json();
+        const alert_id = Number(button.dataset.alertId);
+        const alert = alerts_by_id[alert_id];
+        if (!alert) {
+            console.error(`Alert ${alert_id} not found`);
+            return;
+        }
         renderAlertModal(alert);
         document.getElementById("alert-modal").classList.add("open");
     });

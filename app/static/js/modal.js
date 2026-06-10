@@ -6,7 +6,7 @@ state_dashboard.forEach((state) => {
     });
 });
 
-function renderAlertModal(alert) {
+function renderAlertModal(alert, project_id) {
     const modal_body = document.getElementById("modal-body");
 
     const districts = (alert.district_names || [])
@@ -23,6 +23,11 @@ function renderAlertModal(alert) {
                         ${project.project_name}
                     </button>`
         )
+        .join("");
+
+    const linked_sites = (alert.affected_projects || []).filter((site) => site.project_id === project_id);
+    const affected_sites = linked_sites
+        .map((site) => `<span class="district-tag">${site.project_name}</span>`)
         .join("");
 
     modal_body.innerHTML = `
@@ -151,11 +156,27 @@ function renderAlertModal(alert) {
                 }
 
                 ${
+                    affected_sites
+                        ? `
+                        <div class="detail-section">
+                            <div class="detail-section-title">
+                                Affected Linked Sites
+                            </div>
+
+                            <div class="district-tags">
+                                ${affected_sites}
+                            </div>
+                        </div>
+                        `
+                        : ""
+                }
+
+                ${
                     projects
                         ? `
                         <div class="detail-section">
                             <div class="detail-section-title">
-                                Affected Projects
+                                All Affected Projects
                             </div>
 
                             <div class="project-tags">
@@ -173,12 +194,13 @@ function renderAlertModal(alert) {
 document.querySelectorAll(".project-alert-item").forEach((button) => {
     button.addEventListener("click", async () => {
         const alert_id = Number(button.dataset.alertId);
+        const project_id = Number(button.dataset.projectId);
         const alert = alerts_by_id[alert_id];
         if (!alert) {
             console.error(`Alert ${alert_id} not found`);
             return;
         }
-        renderAlertModal(alert);
+        renderAlertModal(alert, project_id);
         document.getElementById("alert-modal").classList.add("open");
     });
 });

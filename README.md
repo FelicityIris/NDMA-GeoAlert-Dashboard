@@ -75,6 +75,10 @@ DB_CA_CERT=<path/to/cert>
 # Generate using `python -c "import secrets; print(secrets.token_hex(32))"`
 SECRET_KEY=<generated_session_key>
 
+# Public API Bearer Token
+# Generate using `openssl rand -hex 32`
+PUBLIC_API_TOKEN=<generated_token>
+
 # DB Auth
 DB_USER=<mysql_user_name>
 DB_PASSWORD=<mysql_user_password>

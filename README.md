@@ -65,7 +65,7 @@ Configure `.env`:
 ```.env
 # Flask App
 FLASK_APP=run.py
-FLASK_ENV=development
+FLASK_DEBUG=1
 
 # Cert
 # If needed otherwise leave blank
@@ -97,10 +97,6 @@ GND_SITES_DATA=<path/to/csv-file>
 # Generate using `python ./scripts/generate_password_hash.py`
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD_HASH=<hashed_password>
-
-# Scheduler Config
-# Minimum 5 minutes
-SCHEDULER_INTERVAL_MINUTES=15
 ```
 **\* Add necessary csv files containing districts, states, projects and g&d sites data within the project dierctory.**
 

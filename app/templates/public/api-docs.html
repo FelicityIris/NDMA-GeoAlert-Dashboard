@@ -97,9 +97,26 @@
         "alert_id": 12,
         "event": "Heavy Rainfall",
         "severity": "Severe",
-        "expires": "2024-09-13T06:00:00+05:30",
+        "expires": "Fri, 13 Sep 2024 06:00:00 GMT",
         "warning_type": "NEAR_ALERT_POLYGON",
-        "distance_km": 23.41
+        "distance_km": 23.41,
+        "affected_sites": [
+          {
+            "site_type": "PROJECT",
+            "site_name": "Site Alpha",
+            "distance_km": 23.41
+          },
+          {
+            "site_type": "GND",
+            "site_name": "Alpha Dam",
+            "distance_km": 18.72
+          },
+          {
+            "site_type": "GND",
+            "site_name": "Alpha Powerhouse",
+            "distance_km": 25.93
+          }
+        ]
       }
     ]
   }
@@ -198,23 +215,43 @@
   "warnings": [
     {
       "alert_id": 52,
-      "project_id": 4321,
-      "site_name": "Site Alpha",
       "event": "Thunderstorm with Lightning",
       "severity": "Moderate",
       "warning_type": "NEAR_ALERT_POLYGON",
       "distance_km": 3.99,
-      "expires": "Mon, 08 Jun 2026 20:00:00 GMT"
+      "expires": "Mon, 08 Jun 2026 20:00:00 GMT",
+      "affected_sites": [
+        {
+          "site_type": "PROJECT",
+          "site_name": "Site Alpha",
+          "distance_km": 3.99
+        },
+        {
+          "site_type": "GND",
+          "site_name": "Alpha Switchyard",
+          "distance_km": 6.42
+        }
+      ]
     },
     {
       "alert_id": 5,
-      "project_id": 4321,
-      "site_name": "Site Alpha",
       "event": "Pre Fire Alert",
       "severity": "Severe",
       "warning_type": "NEAR_ALERT_POLYGON",
       "distance_km": 4.27,
-      "expires": "Fri, 12 Jun 2026 11:15:00 GMT"
+      "expires": "Fri, 12 Jun 2026 11:15:00 GMT",
+      "affected_sites": [
+        {
+          "site_type": "PROJECT",
+          "site_name": "Site Alpha",
+          "distance_km": 4.27
+        },
+        {
+          "site_type": "GND",
+          "site_name": "Alpha Intake",
+          "distance_km": 8.15
+        }
+      ]
     }
   ]
 }</pre>

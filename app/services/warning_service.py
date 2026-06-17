@@ -234,7 +234,13 @@ def get_all_warnings():
 
             alert = projects[project_id]["alerts"][alert_id]
 
-            alert["affected_sites"].append(warning["site_name"])
+            alert["affected_sites"].append(
+                {
+                    "site_type": warning["site_type"],
+                    "site_name": warning["site_name"],
+                    "distance_km": warning["distance_km"],
+                }
+            )
 
             alert["distance_km"] = min(alert["distance_km"], warning["distance_km"])
 
@@ -282,6 +288,7 @@ def get_project_warnings(project_id):
                 SELECT
                     warnings.alert_id,
                     warnings.project_id,
+                    warnings.site_type,
                     warnings.site_name,
                     warnings.warning_type,
                     warnings.distance_km,
@@ -330,7 +337,13 @@ def get_project_warnings(project_id):
                         "affected_sites": [],
                     }
 
-                alerts[alert_id]["affected_sites"].append(warning["site_name"])
+                alerts[alert_id]["affected_sites"].append(
+                    {
+                        "site_type": warning["site_type"],
+                        "site_name": warning["site_name"],
+                        "distance_km": warning["distance_km"],
+                    }
+                )
 
                 alerts[alert_id]["distance_km"] = min(
                     alerts[alert_id]["distance_km"], warning["distance_km"]

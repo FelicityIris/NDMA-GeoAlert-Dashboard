@@ -23,6 +23,64 @@ fetch("/static/geojson/india-composite.geojson")
         console.error("Failed to load India boundary overlay:", error);
     });
 
+fetch("/static/geojson/india-rivers-simple.geojson")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data, {
+            interactive: false,
+
+            style: {
+                color: "#4A90E2",
+                weight: 1.5,
+                opacity: 0.75
+            }
+        }).addTo(map);
+    })
+    .catch((error) => {
+        console.error("Failed to load river overlay:", error);
+    });
+
+const labelled_rivers = new Set();
+fetch("/static/geojson/india-rivers-labels.geojson")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data, {
+            interactive: false,
+
+            style: {
+                opacity: 0,
+                weight: 0
+            },
+
+            onEachFeature(feature, layer) {
+                const river_name = feature.properties.rivname;
+
+                if (!river_name || labelled_rivers.has(river_name)) {
+                    return;
+                }
+
+                labelled_rivers.add(river_name);
+
+                layer.setText(river_name, {
+                    repeat: false,
+                    center: true,
+                    offset: -3,
+
+                    attributes: {
+                        fill: "#2b6cb0",
+                        "font-size": "10px",
+                        "font-style": "italic",
+                        "font-family": "Inter, sans-serif",
+                        "font-weight": "600"
+                    }
+                });
+            }
+        }).addTo(map);
+    })
+    .catch((error) => {
+        console.error("Failed to load river labels:", error);
+    });
+
 const parse_polygon = (polygon_string) => {
     return polygon_string
         .trim()

@@ -127,6 +127,8 @@ gunicorn run:app \
 - [Shapely](https://github.com/shapely/shapely) & [pyproj](https://github.com/pyproj4/pyproj) - Coordinate based Proximity Analysis to generate per-Project Warnings
 - [Gunicorn](https://gunicorn.org/) - Production deployment
 - [Leaflet](https://leafletjs.com/) - Map display on Home Page
+- [Leaflet Textpath Plugin](https://github.com/makinacorpus/Leaflet.TextPath) - Leaflet plugin to show label text along polylines
 - [Catppuccin Color Pallete](https://catppuccin.com/) - Color and Design Aesthetics
 - [Lucide Icons](https://lucide.dev/) - UI Icons
 - [Community Created Maps of India](https://projects.datameet.org/maps/) - Official Boundary of India
+- [Open Government Data (OGD) Platform India](https://www.data.gov.in/catalog/boundaries-water-resources-projects) - Indian Rivers Polygon Data

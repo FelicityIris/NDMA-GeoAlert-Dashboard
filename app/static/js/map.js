@@ -146,19 +146,15 @@ project_sites.forEach((site) => {
         background-color: ${marker_color};
         width: 1.5rem;
         height: 1.5rem;
-        display: block;
-        left: -1.5rem;
-        top: -1.5rem;
-        position: relative;
         border-radius: 3rem 4rem 0;
         transform: rotate(45deg);
         border: 1px solid #FFFFFF;
     `;
     const project_icon = L.divIcon({
         className: "project-icon",
-        iconAnchor: [0, 24],
-        labelAnchor: [-6, 0],
-        popupAnchor: [0, -36],
+        iconSize: [24, 24],
+        iconAnchor: [12, 24],
+        popupAnchor: [0, -24],
         html: `<div style="${marker_style}"><div/>`
     });
     const marker = L.marker([site.lat, site.lng], { icon: project_icon }).addTo(map);
@@ -182,19 +178,15 @@ gnd_sites.forEach((site) => {
         background-color: ${marker_color};
         width: 1rem;
         height: 1rem;
-        display: block;
-        left: -1.5rem;
-        top: -1.5rem;
-        position: relative;
         border-radius: 3rem 4rem 0;
         transform: rotate(45deg);
         border: 1px solid #FFFFFF;
     `;
     const gnd_icon = L.divIcon({
         className: "gnd-icon",
-        iconAnchor: [0, 24],
-        labelAnchor: [-6, 0],
-        popupAnchor: [0, -36],
+        iconSize: [16, 16],
+        iconAnchor: [8, 16],
+        popupAnchor: [0, -16],
         html: `<div style="${marker_style}"></div>`
     });
     const marker = L.marker([site.lat, site.lng], { icon: gnd_icon }).addTo(map);
